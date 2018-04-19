@@ -12,20 +12,13 @@ entity ALU is
 end ALU;
 
 architecture Behavioral of ALU is
-  signal b2, sum, slt, product, quotient, sel: STD_LOGIC_VECTOR((width-1) downto 0);
+  signal b2,b3, sum, slt: STD_LOGIC_VECTOR((width-1) downto 0);
   --signal product, quotient: integer;
   
 signal const_zero : STD_LOGIC_VECTOR((width-1) downto 0) := (others => '0');
-
-function shiftadd(fir:std_logic_vector((width-1) downto 0);
---TODO figure out how to make VHDL funcitons
-                   sec:std_logic_vector((width-1) downto 0)) return std_logic_vector is variable x;
-begin
-    x <= fir + sec;
-    return x;
-end function shiftadd;
-
-
+signal product : STD_LOGIC_VECTOR((width-1) downto 0) := (others => '0');
+signal quotient : STD_LOGIC_VECTOR((width-1) downto 0) := (others => '0');
+signal modulus : STD_LOGIC_VECTOR((width-1) downto 0) := (others => '0');
 begin
 
 -- hardware inverter for 2's complement 
@@ -34,8 +27,27 @@ b2 <= not b when alucontrol(3) = '1' else b;
 -- hardware adder
 sum <= a + b2 + alucontrol(3);
 
+--begin hardware multiplier
+--b3 <= shift_left(signed(b2),16);
+--product := product + (b3 and a(15));
+--b3 <=shift_right(signed(b2),1);
+--product := product + (b3 and a(14));
+--...
+--hardware multiplication will only be able to caluclate 16bit numbers beause of the nature of single cycle multiplication
 
-product <= shiftAdd(a,b,sel);--use function calls to get product
+--begin hardware division
+--do something to calc quotient;
+-- figure out simple division
+--hardware division will only be able to calculate 16bit numbers because of the nature of single cycle division
+
+
+--begin hardware modulus
+--do something to calc modulus;
+-- figure out simple modulus
+--hardware modulus will only be able to calculate 16bit numbers because of the nature of single cycle modulus
+
+
+
 
 
 -- slt should be 1 if most significant bit of sum is 1
@@ -49,6 +61,7 @@ with alucontrol(2 downto 0) select result <=
   product when "011",
   quotient when "100",
   slt     when "101",
+  modulus when "110",
   const_zero  when others;
   
 -- set the zero flag if result is 0
