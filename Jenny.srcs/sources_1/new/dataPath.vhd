@@ -1,20 +1,17 @@
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
+--dataPath Unit
 
 entity dataPath is
- generic(width: integer);
  port(clk, reset:        in  STD_LOGIC;
-      CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
-      CUrotator:          in STD_LOGIC_VECTOR(1 downto 0);
-      CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:        in STD_LOGIC;
-      alucontrol:        in  STD_LOGIC_VECTOR(3 downto 0);
-      allzero:           out STD_LOGIC;
-      pc:                inout STD_LOGIC_VECTOR((width-1) downto 0);
+      pc:                inout STD_LOGIC_VECTOR(15 downto 0);
       instr:             in  STD_LOGIC_VECTOR(17 downto 0);
-      aluout, writedata: inout STD_LOGIC_VECTOR((width-1) downto 0);
-      readdata:          in  STD_LOGIC_VECTOR((width-1) downto 0));
+       --control unit signals
+      CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
+      CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:        in STD_LOGIC;
+      CUrotator:          in STD_LOGIC_VECTOR(1 downto 0);
+      alucontrol:        in  STD_LOGIC_VECTOR(3 downto 0));
 end;
 
 architecture struct of dataPath is
@@ -85,7 +82,7 @@ end component;
     signal doJump: STD_LOGIC;
     signal pcplus, pcnext,pcjump,pcbranch,pcnextbranch,immData: STD_LOGIC_VECTOR(15 downto 0);
     signal one: STD_LOGIC_VECTOR(15 downto 0);
-    signal const_zero: STD_LOGIC_VECTOR((width-1) downto 0) := (others => '0');
+    signal const_zero: STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
     signal ar,br,wr: STD_LOGIC_VECTOR(5 downto 0);
     signal reg0WD,reg1WD,reg2WD,reg3WD: STD_LOGIC_VECTOR(31 downto 0);
     signal a0,a1,a2,a3,a0n,a1n,a2n,a3n,b0,b1,b2,b3,b0n,b1n,b2n,b3n,immData32: STD_LOGIC_VECTOR(31 downto 0);
@@ -97,7 +94,7 @@ end component;
     
 begin
 
-    one <= const_zero((width-1) downto 1) & X"1";
+    one <= const_zero(15 downto 1) & X"1";
 
     pcjump<= instr(15 downto 0);
     ar <=instr(5 downto 0);
