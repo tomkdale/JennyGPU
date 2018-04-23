@@ -17,9 +17,9 @@ end;
 architecture struct of dataPath is
 
  component alu 
-    port(a, b:  in STD_LOGIC_VECTOR(32 downto 0);
+    port(a, b:  in STD_LOGIC_VECTOR(31 downto 0);
           alucontrol: in  STD_LOGIC_VECTOR(3 downto 0);
-          result:     inout STD_LOGIC_VECTOR(32 downto 0);
+          result:     inout STD_LOGIC_VECTOR(31 downto 0);
           zero:       out STD_LOGIC);
 end component;
 
@@ -31,7 +31,7 @@ end component;
         ad,bd:   out STD_LOGIC_VECTOR(31 downto 0)); --register values
     end component;
         
- component branchFile
+ component branchFile--file holding all branch registers
     port(clk:   in STD_LOGIC;
            we:           in  STD_LOGIC;
         ar:           in  STD_LOGIC_VECTOR( 5 downto 0);
@@ -103,7 +103,7 @@ begin
     immData <= instr(21 downto 6);
     
     immSignExtend: signExtender generic map(32) port map(a=>immData,y=>immData32);
-    pcCLK: flipFlop generic map(width) port map(clk => clk, reset => reset, d=>pcnext, q =>pc);
+    pcCLK: flipFlop generic map(16) port map(clk => clk, reset => reset, d=>pcnext, q =>pc);
     pcIncrement:   adder generic map(16) port map(a => pc,b => one , y => pcplus);
     branchNobranchmux:  mux2 generic map(16) port map(d0 =>pcplus, d1 =>pcbranch, s=> CUbranch, y => pcnext);
     jumpBranchmux:  mux2 generic map(16) port map(d0 => pcnextbranch,d1 => pcjump, s=>doJump, y =>pcbranch);
