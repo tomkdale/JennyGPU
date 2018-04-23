@@ -6,7 +6,7 @@ use IEEE.NUMERIC_STD.all;
 entity dataPath is
  port(clk, reset:        in  STD_LOGIC;
       pc:                inout STD_LOGIC_VECTOR(15 downto 0);
-      instr:             in  STD_LOGIC_VECTOR(17 downto 0);
+      instr:             in  STD_LOGIC_VECTOR(21 downto 0);
        --control unit signals
       CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
       CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:        in STD_LOGIC;
@@ -17,9 +17,9 @@ end;
 architecture struct of dataPath is
 
  component alu 
-    port(a, b:  in STD_LOGIC_VECTOR(31 downto 0);
+    port(a, b:  in STD_LOGIC_VECTOR(32 downto 0);
           alucontrol: in  STD_LOGIC_VECTOR(3 downto 0);
-          result:     inout STD_LOGIC_VECTOR(31 downto 0);
+          result:     inout STD_LOGIC_VECTOR(32 downto 0);
           zero:       out STD_LOGIC);
 end component;
 
@@ -31,11 +31,11 @@ end component;
         ad,bd:   out STD_LOGIC_VECTOR(31 downto 0)); --register values
     end component;
         
- component branchFile--file holding all branch registers
+ component branchFile
     port(clk:   in STD_LOGIC;
            we:           in  STD_LOGIC;
         ar:           in  STD_LOGIC_VECTOR( 5 downto 0);
-        wd:           in  STD_LOGIC_VECTOR(16 downto 0);
+        wd:           in  STD_LOGIC_VECTOR(15 downto 0);
         ad:        out STD_LOGIC_VECTOR(5 downto 0));
     end component;  
       
@@ -80,10 +80,10 @@ end component;
     end component;
     
     signal doJump: STD_LOGIC;
-    signal pcplus, pcnext,pcjump,pcbranch,pcnextbranch,immData: STD_LOGIC_VECTOR(15 downto 0);
+    signal pcplus, pcnext,pcjump,pcbranch,immData: STD_LOGIC_VECTOR(15 downto 0);
     signal one: STD_LOGIC_VECTOR(15 downto 0);
     signal const_zero: STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
-    signal ar,br,wr: STD_LOGIC_VECTOR(5 downto 0);
+    signal ar,br,wr,pcnextbranch: STD_LOGIC_VECTOR(5 downto 0);
     signal reg0WD,reg1WD,reg2WD,reg3WD: STD_LOGIC_VECTOR(31 downto 0);
     signal a0,a1,a2,a3,a0n,a1n,a2n,a3n,b0,b1,b2,b3,b0n,b1n,b2n,b3n,immData32: STD_LOGIC_VECTOR(31 downto 0);
     signal aluResult0,aluResult1,aluResult2,aluResult3: STD_LOGIC_VECTOR(31 downto 0);
@@ -94,7 +94,7 @@ end component;
     
 begin
 
-    one <= const_zero(15 downto 1) & X"1";
+    one <= const_zero(12 downto 1) & X"1";
 
     pcjump<= instr(15 downto 0);
     ar <=instr(5 downto 0);
@@ -129,7 +129,7 @@ begin
     wd1mux: mux2 generic map(32) port map(d0=>aluresult1,d1=>loadMem(63 downto 32),s=>CUload,y=>reg1WD);
     wd2mux: mux2 generic map(32) port map(d0=>aluresult2,d1=>loadMem(95 downto 64),s=>CUload,y=>reg2WD);
     wd3mux: mux2 generic map(32) port map(d0=>aluresult3,d1=>loadMem(127 downto 96),s=>CUload,y=>reg3WD);
-    
+
     saveMem <= aluresult0 & aluresult1 & aluresult2 & aluresult3;
     dataMemory: dmem port map(clk=>clk, we=>CUdataMemWrite, dat=>saveMem, addr=> immData,rd=>loadMem);
     
