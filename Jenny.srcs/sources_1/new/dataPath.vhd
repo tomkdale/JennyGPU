@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
---dataPath Unit
+--dataPath Unit for the Jenny GPU
 
 entity dataPath is
  port(clk, reset:        in  STD_LOGIC;
@@ -15,7 +15,7 @@ entity dataPath is
 end;
 
 architecture struct of dataPath is
-
+--the datapath needs n alus to parrallels data processing
  component alu 
     port(a, b:  in STD_LOGIC_VECTOR(31 downto 0);
           alucontrol: in  STD_LOGIC_VECTOR(3 downto 0);
@@ -23,6 +23,7 @@ architecture struct of dataPath is
           zero:       out STD_LOGIC);
 end component;
 
+--the datapath needs n register files for parrallelized data accessing
  component dataRegFile 
     port(clk:   in STD_LOGIC;
         we:     in STD_LOGIC;--write enable bit
@@ -31,6 +32,7 @@ end component;
         ad,bd:   out STD_LOGIC_VECTOR(31 downto 0)); --register values
     end component;
         
+  --The datapath needs a register file to store saved branch locations and other scalar data      
  component branchFile
     port(clk:   in STD_LOGIC;
            we:           in  STD_LOGIC;
@@ -58,14 +60,14 @@ end component;
                     q: out STD_LOGIC_VECTOR((width-1) downto 0));
     end component;
     
-      -- The datapath needs a mux2 component for routing data
+      -- The datapath needs a mux2 component for routing data. needs variable size
     component mux2 generic(width: integer);
       port(d0, d1: in  STD_LOGIC_VECTOR(width-1 downto 0);
            s:      in  STD_LOGIC;
            y:      out STD_LOGIC_VECTOR(width-1 downto 0));
     end component;
     
-    component rotator 
+    component rotator --rotator moves the a registers between ALUs
         port(a0, a1, a2, a3: in  STD_LOGIC_VECTOR(31 downto 0);
             rot: in STD_LOGIC_VECTOR(1 downto 0);
             --new a values (values after rotation)
@@ -79,6 +81,7 @@ end component;
            rd:       out STD_LOGIC_VECTOR(127 downto 0));
     end component;
     
+    --data path signals
     signal doJump: STD_LOGIC;
     signal pcplus, pcnext,pcjump,pcbranch,pcnextbranch,immData: STD_LOGIC_VECTOR(15 downto 0);
     signal one: STD_LOGIC_VECTOR(15 downto 0);
@@ -90,12 +93,11 @@ end component;
     signal z0,z1,z2,z3: STD_LOGIC;--zero results from each alu
     signal loadMem: STD_LOGIC_VECTOR(127 downto 0);
     signal saveMem: STD_LOGIC_VECTOR(127 downto 0);
-    --add alot more signals
+    
     
 begin
-
+--data path buses and hardware
     one <= const_zero(12 downto 1) & X"1";
-
     pcjump<= instr(15 downto 0);
     ar <=instr(5 downto 0);
     br <= instr(11 downto 6);
@@ -110,9 +112,9 @@ begin
     branchRegFile: branchFile  port map(clk => clk,we =>CUbranchDataWrite , ar=>ar,wd =>immData, ad=>  pcnextbranch  );
     
     rf0: dataRegFile port map(clk=>clk,we=>CUreg0enable, ar=>ar,br=>br,wr=>wr,wd=>reg0WD,ad=>a0,bd=>b0);
-    rf1: dataRegFile port map(clk=>clk,we=>CUreg0enable, ar=>ar,br=>br,wr=>wr,wd=>reg1WD,ad=>a1,bd=>b1);
-    rf2: dataRegFile port map(clk=>clk,we=>CUreg0enable, ar=>ar,br=>br,wr=>wr,wd=>reg2WD,ad=>a2,bd=>b2);
-    rf3: dataRegFile port map(clk=>clk,we=>CUreg0enable, ar=>ar,br=>br,wr=>wr,wd=>reg3WD,ad=>a3,bd=>b3);
+    rf1: dataRegFile port map(clk=>clk,we=>CUreg1enable, ar=>ar,br=>br,wr=>wr,wd=>reg1WD,ad=>a1,bd=>b1);
+    rf2: dataRegFile port map(clk=>clk,we=>CUreg2enable, ar=>ar,br=>br,wr=>wr,wd=>reg2WD,ad=>a2,bd=>b2);
+    rf3: dataRegFile port map(clk=>clk,we=>CUreg3enable, ar=>ar,br=>br,wr=>wr,wd=>reg3WD,ad=>a3,bd=>b3);
     rot1: rotator port map(a0=>a0,a1=>a1,a2=>a2,a3=>a3,rot=>CUrotator, a0n=>a0n,a1n=>a1n,a2n=>a2n,a3n=>a3n);
     immMux0: mux2 generic map(32) port map(d0=>b0,d1=>immData32,s=>CUimmCalc,y=>b0n);
     immMux1: mux2 generic map(32) port map(d0=>b1,d1=>immData32,s=>CUimmCalc,y=>b1n);
