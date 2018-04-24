@@ -45,11 +45,11 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-Jenny.runs/
-Jenny.cache/
-Jenny.hw/
-Jenny.ip_user_files/
-Jenny.sim/
+*.runs/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.sim/
 *.log
 *.jou
 *.str
