@@ -11,7 +11,7 @@ architecture Behavioral of tester_ALU is
     signal alucontrol :std_logic_vector(3 downto 0) := "0010";
     signal result :std_logic_vector(15 downto 0);
     signal zero : std_logic;
-    
+
     component alu generic(width: integer);
       port(a, b:       in  STD_LOGIC_VECTOR((width-1) downto 0);
            alucontrol: in  STD_LOGIC_VECTOR(3 downto 0);
