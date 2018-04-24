@@ -3,25 +3,29 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
 --dataPath Unit
 
-entity dataPath is
- port(clk, reset:        in  STD_LOGIC;
-      pc:                inout STD_LOGIC_VECTOR(15 downto 0);
-      instr:             in  STD_LOGIC_VECTOR(21 downto 0);
-       --control unit signals
-      CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
-      CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:        in STD_LOGIC;
-      CUrotator:          in STD_LOGIC_VECTOR(1 downto 0);
-      alucontrol:        in  STD_LOGIC_VECTOR(3 downto 0));
+entity datapath_testbench is
 end;
 
 architecture struct of dataPath is
 
- component alu 
-    port(a, b:  in STD_LOGIC_VECTOR(31 downto 0);
-          alucontrol: in  STD_LOGIC_VECTOR(3 downto 0);
-          result:     inout STD_LOGIC_VECTOR(31 downto 0);
-          zero:       out STD_LOGIC);
-end component;
+    component dataPath is
+        port(clk, reset:        in  STD_LOGIC;
+          pc:                inout STD_LOGIC_VECTOR(15 downto 0);
+          instr:             in  STD_LOGIC_VECTOR(21 downto 0);
+           --control unit signals
+          CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
+          CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:        in STD_LOGIC;
+          CUrotator:          in STD_LOGIC_VECTOR(1 downto 0);
+          alucontrol:        in  STD_LOGIC_VECTOR(3 downto 0));
+    end component;
+    
+    signal pc : STD_LOGIC_VECTOR(15 downto 0);
+    signal instr: STD_LOGIC_VECTOR(21 downto 0);
+    --control unit signals
+    signal CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable: STD_LOGIC;
+    signal CUimmCalc,CUbranchZero,CUload,CUdataMemWrite: STD_LOGIC;
+    signal CUrotator: STD_LOGIC_VECTOR(1 downto 0);
+    signal alucontrol: STD_LOGIC_VECTOR(3 downto 0));
 
  component dataRegFile 
     port(clk:   in STD_LOGIC;

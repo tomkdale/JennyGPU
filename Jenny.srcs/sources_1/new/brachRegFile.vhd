@@ -12,7 +12,7 @@ entity branchFile is
        we:           in  STD_LOGIC;
        ar:           in  STD_LOGIC_VECTOR( 5 downto 0);
        wd:           in  STD_LOGIC_VECTOR(15 downto 0);
-       ad:        out STD_LOGIC_VECTOR(5 downto 0));
+       ad:        out STD_LOGIC_VECTOR(15 downto 0));
 end;
 
 architecture behave of branchFile is
