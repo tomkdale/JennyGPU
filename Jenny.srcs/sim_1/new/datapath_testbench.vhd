@@ -9,8 +9,8 @@ end;
 architecture Behavioral of datapath_testbench is
 
     signal clk, reset : STD_LOGIC;
-    signal pc : STD_LOGIC_VECTOR(15 downto 0);
-    signal instr: STD_LOGIC_VECTOR(21 downto 0);
+    signal addr : STD_LOGIC_VECTOR(15 downto 0);
+    signal instr: STD_LOGIC_VECTOR(31 downto 0);
     --control unit signals
     signal CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable: STD_LOGIC;
     signal CUimmCalc,CUbranchZero,CUload,CUdataMemWrite: STD_LOGIC;
@@ -19,8 +19,8 @@ architecture Behavioral of datapath_testbench is
 
     component dataPath is
         port(clk, reset : in  STD_LOGIC;
-          pc:                                                   inout STD_LOGIC_VECTOR(15 downto 0);
-          instr:                                                in  STD_LOGIC_VECTOR(21 downto 0);
+          addr:                                                   inout STD_LOGIC_VECTOR(15 downto 0);
+          instr:                                                in  STD_LOGIC_VECTOR(31 downto 0);
            --control unit signals
           CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
           CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:         in STD_LOGIC;
@@ -32,7 +32,7 @@ begin
   maindatapath: dataPath port map(
     clk => clk,
     reset => reset,
-    pc => pc, 
+    addr => addr, 
     instr => instr, 
     CUbranch => CUbranch, 
     CUbranchDataWrite => CUbranchDataWrite, 
