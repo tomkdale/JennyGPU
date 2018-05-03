@@ -81,33 +81,30 @@ end component;
 
     -- Data path signals
     signal doJump: STD_LOGIC;
-    signal pcplus,pcjump,pcbranch,pcnextbranch,immData: STD_LOGIC_VECTOR(15 downto 0);
+    signal pcplus, pcjump, pcbranch, pcnextbranch, immData: STD_LOGIC_VECTOR(15 downto 0);
     signal one: STD_LOGIC_VECTOR(15 downto 0);
     signal const_zero: STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
-    signal ar,br,wr: STD_LOGIC_VECTOR(5 downto 0);
-    signal reg0WD,reg1WD,reg2WD,reg3WD: STD_LOGIC_VECTOR(31 downto 0);
-    signal a0,a1,a2,a3,a0n,a1n,a2n,a3n,b0,b1,b2,b3,b0n,b1n,b2n,b3n,immData32: STD_LOGIC_VECTOR(31 downto 0);
-    signal aluResult0,aluResult1,aluResult2,aluResult3: STD_LOGIC_VECTOR(31 downto 0);
-    signal z0,z1,z2,z3: STD_LOGIC;--zero results from each alu
+    signal ar, br, wr: STD_LOGIC_VECTOR(5 downto 0);
+    signal reg0WD, reg1WD, reg2WD, reg3WD: STD_LOGIC_VECTOR(31 downto 0);
+    signal a0, a1, a2, a3, a0n, a1n, a2n, a3n, b0, b1, b2, b3, b0n, b1n, b2n, b3n, immData32: STD_LOGIC_VECTOR(31 downto 0);
+    signal aluResult0, aluResult1, aluResult2, aluResult3: STD_LOGIC_VECTOR(31 downto 0);
+    signal z0, z1, z2, z3: STD_LOGIC; --zero results from each alu
     signal loadMem: STD_LOGIC_VECTOR(127 downto 0);
     signal saveMem: STD_LOGIC_VECTOR(127 downto 0);
 
-begin
--- Data path buses and hardware
+begin -- Data path buses and hardware
   
-        one  <= const_zero(12 downto 1) & X"1";
-        pcjump  <= instr(15 downto 0);
-        ar <= instr(21 downto 16) when CUimmCalc = '1' else
-            instr(15  downto 10);
-        br <= "000000" when CUimmCalc ='1' else
-            instr(9 downto 4);
-        wr      <= instr(21 downto 16);
-        immData <= instr(15 downto 0);
+    one     <= const_zero(12 downto 1) & X"1";
+    pcjump  <= instr(15 downto 0);
+    ar      <= instr(21 downto 16) when CUimmCalc = '1' else instr(15  downto 10);
+    br      <= "000000" when CUimmCalc ='1' else instr(9 downto 4);
+    wr      <= instr(21 downto 16);
+    immData <= instr(15 downto 0);
 
     immSignExtend:     signExtender generic map(32) port map(a => immData,y => immData32);
     pcIncrement:       adder        generic map(16) port map(a => addr, b => one, y => pcplus);
     branchNobranchmux: mux2         generic map(16) port map(d0 => pcplus, d1 => pcbranch, s => CUbranch, y => addrnext);
-    jumpBranchmux:     mux2         generic map(16) port map(d0 => pcnextbranch, d1 => pcjump, s => doJump, y => pcbranch);
+    jumpBranchmux:     mux2         generic map(16) port map(d0 => pcjump, d1 => pcnextbranch, s => doJump, y => pcbranch);
     branchRegFile:     branchFile   port    map(clk => clk, we => CUbranchDataWrite, ar => ar, wd => immData, ad => pcnextbranch);
 
     rf0:     dataRegFile port    map(clk => clk, we => CUreg0enable, ar => ar, br => br, wr=> wr, wd => reg0WD, ad => a0, bd => b0);
@@ -115,10 +112,10 @@ begin
     rf2:     dataRegFile port    map(clk => clk, we => CUreg2enable, ar => ar, br => br, wr=> wr, wd => reg2WD, ad => a2, bd => b2);
     rf3:     dataRegFile port    map(clk => clk, we => CUreg3enable, ar => ar, br => br, wr=> wr, wd => reg3WD, ad => a3, bd => b3);
     rot1:    rotator     port    map(a0 => a0, a1 => a1, a2 => a2, a3 => a3, rot => rot, a0n => a0n, a1n => a1n, a2n => a2n, a3n => a3n);
-    immMux0: mux2        generic map(32) port map(d0=>b0,d1=>immData32,s=>CUimmCalc,y=>b0n);
-    immMux1: mux2        generic map(32) port map(d0=>b1,d1=>immData32,s=>CUimmCalc,y=>b1n);
-    immMux2: mux2        generic map(32) port map(d0=>b2,d1=>immData32,s=>CUimmCalc,y=>b2n);
-    immMux3: mux2        generic map(32) port map(d0=>b3,d1=>immData32,s=>CUimmCalc,y=>b3n);
+    immMux0: mux2        generic map(32) port map(d0 => b0, d1 => immData32, s => CUimmCalc, y => b0n);
+    immMux1: mux2        generic map(32) port map(d0 => b1, d1 => immData32, s => CUimmCalc, y => b1n);
+    immMux2: mux2        generic map(32) port map(d0 => b2, d1 => immData32, s => CUimmCalc, y => b2n);
+    immMux3: mux2        generic map(32) port map(d0 => b3, d1 => immData32, s => CUimmCalc, y => b3n);
     alu0:    alu         port    map(a => a0n, b => b0n, alucontrol => aluControl, result => aluresult0, zero => z0);
     alu1:    alu         port    map(a => a1n, b => b1n, alucontrol => aluControl, result => aluresult1, zero => z1);
     alu2:    alu         port    map(a => a2n, b => b2n, alucontrol => aluControl, result => aluresult2, zero => z2);
@@ -132,9 +129,9 @@ begin
     wd3mux: mux2 generic map(32) port map(d0 => aluresult3, d1 => loadMem(127 downto 96), s => CUdatamemwrite, y => reg3WD);
 
     saveMem <= aluresult0 & aluresult1 & aluresult2 & aluresult3;
-    dataMemory: dmem port map(clk => clk, load => CUload,save=>CUdatamemwrite, dat => saveMem, dataaddr => immData, rd => loadMem);
+    dataMemory: dmem port map(clk => clk, load => CUload, save => CUdatamemwrite, dat => saveMem, dataaddr => immData, rd => loadMem);
 
-    data0 <= aluresult0;--for outputting data to VGA down the road
+    data0 <= aluresult0; --for outputting data to VGA down the road
     data1 <= aluresult1;
     data2 <= aluresult2;
     data3 <= aluresult3;

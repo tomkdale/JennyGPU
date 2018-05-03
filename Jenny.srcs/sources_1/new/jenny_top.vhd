@@ -46,11 +46,11 @@ architecture Behavioral of jenny_top is
                       q: out STD_LOGIC_VECTOR((width-1) downto 0));
       end component;
       
-     signal addr :STD_LOGIC_VECTOR(15 downto 0);
-     signal addrnext        :STD_LOGIC_VECTOR(15 downto 0);
-     signal instr :STD_LOGIC_VECTOR(31 downto 0);
-     signal rot :STD_LOGIC_VECTOR(1 downto 0);
-     signal CUimmCalc,CUbranchZero,CUload,CUdataMemWrite :STD_LOGIC;
+     signal addr:     STD_LOGIC_VECTOR(15 downto 0);
+     signal addrnext: STD_LOGIC_VECTOR(15 downto 0);
+     signal instr:    STD_LOGIC_VECTOR(31 downto 0);
+     signal rot:      STD_LOGIC_VECTOR(1 downto 0);
+     signal CUimmCalc, CUbranchZero, CUload, CUdataMemWrite: STD_LOGIC;
      signal CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable,CUbranch,CUbranchDataWrite :STD_LOGIC;
      signal alucontrol      :STD_LOGIC_VECTOR(3  downto 0);
 begin
