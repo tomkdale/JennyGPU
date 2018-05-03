@@ -72,7 +72,7 @@ end component;
         port(a0, a1, a2, a3:    in    STD_LOGIC_VECTOR(31 downto 0);
             rot:                in    STD_LOGIC_VECTOR(1  downto 0);
             -- New a values (values after rotation)
-            a0n, a1n, a2n, a3n: inout STD_LOGIC_VECTOR(31 downto 0));
+            a0n, a1n, a2n, a3n: out STD_LOGIC_VECTOR(31 downto 0));
     end component;
     component dmem is -- Data memory
       port(clk:  in  STD_LOGIC;
@@ -97,20 +97,15 @@ end component;
 
 begin
 -- Data path buses and hardware
-    one     <= const_zero(12 downto 1) & X"1";
-    process(clk) is
-    begin
+  
+        one  <= const_zero(12 downto 1) & X"1";
         pcjump  <= instr(15 downto 0);
-        if (CUimmCalc = '1') then
-            ar <= instr(21 downto 16);
-            br      <= "000000";
-        else
-            ar  <= instr(15  downto 10);
-            br <= instr(9 downto 4);
-        end if;
+        ar <= instr(21 downto 16) when CUimmCalc = '1' else
+            instr(15  downto 10);
+        br <= "000000" when CUimmCalc ='1' else
+            instr(9 downto 4);
         wr      <= instr(21 downto 16);
         immData <= instr(15 downto 0);
-    end process;
 
     immSignExtend:     signExtender generic map(32) port map(a => immData,y => immData32);
     pcCLK:             flipFlop     generic map(16) port map(clk => clk, reset => reset, d => pcnext, q => addr);
