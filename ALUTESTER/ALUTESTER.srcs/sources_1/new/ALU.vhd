@@ -137,8 +137,8 @@ slt <= ( const_zero(31 downto 1) & '1') when sum(31) = '1' else (others =>'0');
 
 
 with alucontrol(2 downto 0) select result <=
-  a and b when "000",
-  a or b  when "001",
+  a and b2 when "000",
+  a or b2  when "001",
   sum     when "010",
   product when "011",
   quotient when "100",

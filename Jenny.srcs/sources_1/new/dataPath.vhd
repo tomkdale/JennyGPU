@@ -4,14 +4,15 @@ use IEEE.NUMERIC_STD.all;
 -- dataPath Unit for the Jenny GPU
 
 entity dataPath is
- port(clk, reset:        in     STD_LOGIC;
-      pc:                inout  STD_LOGIC_VECTOR(15 downto 0);
-      instr:             in     STD_LOGIC_VECTOR(21 downto 0);
-      -- Control unit signals
-      CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
-      CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:        in STD_LOGIC;
-      CUrotator:         in     STD_LOGIC_VECTOR(1  downto 0);
-      alucontrol:        in     STD_LOGIC_VECTOR(3  downto 0));
+ port(clk,reset:        in     STD_LOGIC;
+          instr:             in     STD_LOGIC_VECTOR(31 downto 0);
+          addr:              inout    STD_LOGIC_VECTOR(15 downto 0);
+          data0,data1,data2,data3:             out    STD_LOGIC_VECTOR(31 downto 0);
+          -- Control unit signals
+          CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
+          CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:        in STD_LOGIC;
+          rot:               in STD_LOGIC_VECTOR(1 downto 0);
+          alucontrol:        in     STD_LOGIC_VECTOR(3  downto 0));
 end;
 
 architecture struct of dataPath is
@@ -94,7 +95,6 @@ end component;
     signal loadMem: STD_LOGIC_VECTOR(127 downto 0);
     signal saveMem: STD_LOGIC_VECTOR(127 downto 0);
 
-
 begin
 -- Data path buses and hardware
     one     <= const_zero(12 downto 1) & X"1";
@@ -105,8 +105,8 @@ begin
     immData <= instr(21 downto 6);
 
     immSignExtend:     signExtender generic map(32) port map(a => immData,y => immData32);
-    pcCLK:             flipFlop     generic map(16) port map(clk => clk, reset => reset, d => pcnext, q => pc);
-    pcIncrement:       adder        generic map(16) port map(a => pc, b => one, y => pcplus);
+    pcCLK:             flipFlop     generic map(16) port map(clk => clk, reset => reset, d => pcnext, q => addr);
+    pcIncrement:       adder        generic map(16) port map(a => addr, b => one, y => pcplus);
     branchNobranchmux: mux2         generic map(16) port map(d0 => pcplus, d1 => pcbranch, s => CUbranch, y => pcnext);
     jumpBranchmux:     mux2         generic map(16) port map(d0 => pcnextbranch, d1 => pcjump, s => doJump, y => pcbranch);
     branchRegFile:     branchFile   port    map(clk => clk, we => CUbranchDataWrite, ar => ar, wd => immData, ad => pcnextbranch);
@@ -115,7 +115,7 @@ begin
     rf1:     dataRegFile port    map(clk => clk, we => CUreg1enable, ar => ar, br => br, wr=> wr, wd => reg1WD, ad => a1, bd => b1);
     rf2:     dataRegFile port    map(clk => clk, we => CUreg2enable, ar => ar, br => br, wr=> wr, wd => reg2WD, ad => a2, bd => b2);
     rf3:     dataRegFile port    map(clk => clk, we => CUreg3enable, ar => ar, br => br, wr=> wr, wd => reg3WD, ad => a3, bd => b3);
-    rot1:    rotator     port    map(a0 => a0, a1 => a1, a2 => a2, a3 => a3, rot => CUrotator, a0n => a0n, a1n => a1n, a2n => a2n, a3n => a3n);
+    rot1:    rotator     port    map(a0 => a0, a1 => a1, a2 => a2, a3 => a3, rot => rot, a0n => a0n, a1n => a1n, a2n => a2n, a3n => a3n);
     immMux0: mux2        generic map(32) port map(d0=>b0,d1=>immData32,s=>CUimmCalc,y=>b0n);
     immMux1: mux2        generic map(32) port map(d0=>b1,d1=>immData32,s=>CUimmCalc,y=>b1n);
     immMux2: mux2        generic map(32) port map(d0=>b2,d1=>immData32,s=>CUimmCalc,y=>b2n);
@@ -134,5 +134,10 @@ begin
 
     saveMem <= aluresult0 & aluresult1 & aluresult2 & aluresult3;
     dataMemory: dmem port map(clk => clk, we => CUdataMemWrite, dat => saveMem, addr => immData, rd => loadMem);
+
+    data0 <= aluresult0;--for outputting data to VGA down the road
+    data1 <= aluresult1;
+    data2 <= aluresult2;
+    data3 <= aluresult3;
 
 end struct;

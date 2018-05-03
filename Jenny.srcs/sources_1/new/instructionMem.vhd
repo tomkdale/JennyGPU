@@ -8,13 +8,12 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 use IEEE.NUMERIC_STD.all;
 
 entity imem is -- instruction memory
-  generic(width: integer);
-  port(a:  in  STD_LOGIC_VECTOR(5 downto 0);
-       rd: out STD_LOGIC_VECTOR((width-1) downto 0));
+  port(addr:  in  STD_LOGIC_VECTOR(15 downto 0);
+       instr: out STD_LOGIC_VECTOR(31 downto 0));
   end;
 
 architecture behave of imem is
-  type ramtype is array (63 downto 0) of STD_LOGIC_VECTOR((width-1) downto 0);
+  type ramtype is array (63 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
 
 
   -- Function to initialize the instruction memory from a data file
@@ -22,7 +21,7 @@ architecture behave of imem is
 
   variable ch:        character;
   variable index:     integer;
-  variable result:    signed((width-1) downto 0);
+  variable result:    signed(31 downto 0);
   variable tmpResult: signed(63 downto 0);
   file     mem_file:  TEXT is in RamFileName;
   variable L:         line;
@@ -30,13 +29,13 @@ architecture behave of imem is
   begin
     -- Initialize memory from a file
     for i in 0 to 63 loop -- set all contents low
-      RAM(i) := std_logic_vector(to_unsigned(0, width));
+      RAM(i) := std_logic_vector(to_unsigned(0, 32));
     end loop;
     index := 0;
     while not endfile(mem_file) loop
       -- Read the next line from the file
       readline(mem_file, L);
-      result := to_signed(0,width);
+      result := to_signed(0,32);
       for i in 1 to 8 loop
         -- Read character from the line just read
         read(L, ch);
@@ -61,11 +60,11 @@ architecture behave of imem is
   end function;
 
   -- Use the impure function to read RAM from a file and store in the FPGA's ram memory
-  signal mem: ramtype := InitRamFromFile("memfile.dat");
+  signal mem: ramtype := InitRamFromFile("memfile1.dat");
 
 begin
-  process ( a ) is
+  process ( addr ) is
   begin
-    rd <= mem( to_integer(unsigned(a)) );
+    instr <= mem( to_integer(unsigned(addr)) );
   end process;
 end behave;
