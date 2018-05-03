@@ -139,4 +139,5 @@ begin
     data1 <= aluresult1;
     data2 <= aluresult2;
     data3 <= aluresult3;
+
 end struct;
