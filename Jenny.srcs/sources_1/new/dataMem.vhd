@@ -9,9 +9,9 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 use IEEE.NUMERIC_STD.all;
 
 entity dmem is -- data memory
-  port(clk, we: in  STD_LOGIC;
+  port(clk, load,save: in  STD_LOGIC;
        dat:     in  STD_LOGIC_VECTOR(127 downto 0);
-       addr:    in  STD_LOGIC_VECTOR(15  downto 0);
+       dataaddr:    in  STD_LOGIC_VECTOR(15  downto 0);
        rd:      out STD_LOGIC_VECTOR(127 downto 0));
 end;
 
@@ -23,10 +23,12 @@ begin
   begin
   -- Write data to file
     if clk'event and clk = '1' then
-        if (we = '1') then
-			mem( to_integer(unsigned(addr(15 downto 0))) ) <= dat;
-        end if;
+        if (save = '1') then
+			mem( to_integer(unsigned(dataaddr(15 downto 0))) ) <= dat;
+		elsif(load= '1') then
+         rd <= mem( to_integer(unsigned(dataaddr(15 downto 0))) ); -- word aligned
+       end if;
     end if;
-    rd <= mem( to_integer(unsigned(addr(15 downto 0))) ); -- word aligned
+    
   end process;
 end;

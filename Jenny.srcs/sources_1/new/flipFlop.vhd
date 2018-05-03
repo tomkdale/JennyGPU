@@ -12,13 +12,12 @@ end;
 
 architecture asynchronous of flipFlop is
 begin
-  process(clk, reset) begin
-    if reset = '1' then  
-	  -- q <= std_logic_vector(to_unsigned(0,width)); -- alternate
-	  q <= (others => '0');
+  process (clk,reset)begin
+  if reset = '1' then
+    q <= (others =>'0');
     elsif clk'event and clk = '1' then
       q <= d;
-    end if;
+      end if;
   end process;
 end;
 

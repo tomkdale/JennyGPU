@@ -6,7 +6,8 @@ use IEEE.NUMERIC_STD.all;
 entity dataPath is
  port(clk,reset:        in     STD_LOGIC;
           instr:             in     STD_LOGIC_VECTOR(31 downto 0);
-          addr:              inout    STD_LOGIC_VECTOR(15 downto 0);
+          addr:              in    STD_LOGIC_VECTOR(15 downto 0);
+          addrnext:        out STD_LOGIC_VECTOR(15 downto 0);
           data0,data1,data2,data3:             out    STD_LOGIC_VECTOR(31 downto 0);
           -- Control unit signals
           CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
@@ -54,12 +55,7 @@ end component;
            y: out STD_LOGIC_VECTOR(width-1 downto 0));
     end component;
 
-      -- The datapath needs a flip-flop register component for program counter etc.
-    component flipFlop generic(width: integer);
-      port(clk, reset: in  STD_LOGIC;
-                    d: in  STD_LOGIC_VECTOR((width-1) downto 0);
-                    q: out STD_LOGIC_VECTOR((width-1) downto 0));
-    end component;
+   
 
       -- The datapath needs a mux2 component for routing data. needs variable size
     component mux2 generic(width: integer);
@@ -76,15 +72,16 @@ end component;
     end component;
     component dmem is -- Data memory
       port(clk:  in  STD_LOGIC;
-           we:   in  STD_LOGIC;
+           load:   in  STD_LOGIC;
+           save:   in  STD_LOGIC;
            dat:  in  STD_LOGIC_VECTOR(127 downto 0);
-           addr: in  STD_LOGIC_VECTOR(15  downto 0);
+           dataaddr: in  STD_LOGIC_VECTOR(15  downto 0);
            rd:   out STD_LOGIC_VECTOR(127 downto 0));
     end component;
 
     -- Data path signals
     signal doJump: STD_LOGIC;
-    signal pcplus, pcnext,pcjump,pcbranch,pcnextbranch,immData: STD_LOGIC_VECTOR(15 downto 0);
+    signal pcplus,pcjump,pcbranch,pcnextbranch,immData: STD_LOGIC_VECTOR(15 downto 0);
     signal one: STD_LOGIC_VECTOR(15 downto 0);
     signal const_zero: STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
     signal ar,br,wr: STD_LOGIC_VECTOR(5 downto 0);
@@ -108,9 +105,8 @@ begin
         immData <= instr(15 downto 0);
 
     immSignExtend:     signExtender generic map(32) port map(a => immData,y => immData32);
-    pcCLK:             flipFlop     generic map(16) port map(clk => clk, reset => reset, d => pcnext, q => addr);
     pcIncrement:       adder        generic map(16) port map(a => addr, b => one, y => pcplus);
-    branchNobranchmux: mux2         generic map(16) port map(d0 => pcplus, d1 => pcbranch, s => CUbranch, y => pcnext);
+    branchNobranchmux: mux2         generic map(16) port map(d0 => pcplus, d1 => pcbranch, s => CUbranch, y => addrnext);
     jumpBranchmux:     mux2         generic map(16) port map(d0 => pcnextbranch, d1 => pcjump, s => doJump, y => pcbranch);
     branchRegFile:     branchFile   port    map(clk => clk, we => CUbranchDataWrite, ar => ar, wd => immData, ad => pcnextbranch);
 
@@ -130,13 +126,13 @@ begin
 
     doJump <= z0 and z1 and z2 and z3 and CUbranchZero;
 
-    wd0mux: mux2 generic map(32) port map(d0 => aluresult0, d1 => loadMem(31  downto  0), s => CUload, y => reg0WD);
-    wd1mux: mux2 generic map(32) port map(d0 => aluresult1, d1 => loadMem(63  downto 32), s => CUload, y => reg1WD);
-    wd2mux: mux2 generic map(32) port map(d0 => aluresult2, d1 => loadMem(95  downto 64), s => CUload, y => reg2WD);
-    wd3mux: mux2 generic map(32) port map(d0 => aluresult3, d1 => loadMem(127 downto 96), s => CUload, y => reg3WD);
+    wd0mux: mux2 generic map(32) port map(d0 => aluresult0, d1 => loadMem(31  downto  0), s => CUdatamemwrite, y => reg0WD);
+    wd1mux: mux2 generic map(32) port map(d0 => aluresult1, d1 => loadMem(63  downto 32), s => CUdatamemwrite, y => reg1WD);
+    wd2mux: mux2 generic map(32) port map(d0 => aluresult2, d1 => loadMem(95  downto 64), s => CUdatamemwrite, y => reg2WD);
+    wd3mux: mux2 generic map(32) port map(d0 => aluresult3, d1 => loadMem(127 downto 96), s => CUdatamemwrite, y => reg3WD);
 
     saveMem <= aluresult0 & aluresult1 & aluresult2 & aluresult3;
-    dataMemory: dmem port map(clk => clk, we => CUdataMemWrite, dat => saveMem, addr => immData, rd => loadMem);
+    dataMemory: dmem port map(clk => clk, load => CUload,save=>CUdatamemwrite, dat => saveMem, dataaddr => immData, rd => loadMem);
 
     data0 <= aluresult0;--for outputting data to VGA down the road
     data1 <= aluresult1;

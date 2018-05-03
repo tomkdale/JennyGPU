@@ -38,7 +38,7 @@ begin
       -- Generate reset for first two clock cycles
       process begin
         reset <= '1';
-        wait for 22 ns;
+        wait for 12 ns;
         reset <= '0';
         wait;
       end process;
