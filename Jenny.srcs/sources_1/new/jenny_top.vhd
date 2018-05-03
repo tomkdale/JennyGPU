@@ -26,7 +26,7 @@ architecture Behavioral of jenny_top is
 
     component controlUnit is
             port(reset:     in STD_LOGIC;
-            instr:          in STD_LOGIC_VECTOR(12 downto 0);
+            instr:          in STD_LOGIC_VECTOR(31 downto 0);
             CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable,CUbranch,CUbranchDataWrite:   out STD_LOGIC;
             CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:        out STD_LOGIC;
             rot:            out STD_LOGIC_VECTOR(1 downto 0);
@@ -50,7 +50,7 @@ begin
         addr<="0000000000000000";
         
     end process;
-    cu: controlUnit port map(reset=>reset,instr=>instr(28 downto 16),rot=>rot,CUreg0enable=>CUreg0enable,
+    cu: controlUnit port map(reset=>reset,instr=>instr,rot=>rot,CUreg0enable=>CUreg0enable,
         CUreg1enable=>CUreg1enable,CUreg2enable=>CUreg2enable,CUreg3enable=>CUreg3enable,CUbranch=>CUbranch,CUbranchDataWrite=>CUbranchDataWrite,
         CUimmCalc=>CUimmCalc,CUbranchZero=>CUbranchZero,CUload=>CUload,CUdataMemWrite=>CUdataMemWrite); 
     instructionMem: imem port map(addr=>addr,instr=>instr);

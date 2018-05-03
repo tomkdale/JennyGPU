@@ -135,7 +135,7 @@ begin
     saveMem <= aluresult0 & aluresult1 & aluresult2 & aluresult3;
     dataMemory: dmem port map(clk => clk, we => CUdataMemWrite, dat => saveMem, addr => immData, rd => loadMem);
 
-    data0 <= aluresult0;
+    data0 <= aluresult0;--for outputting data to VGA down the road
     data1 <= aluresult1;
     data2 <= aluresult2;
     data3 <= aluresult3;
