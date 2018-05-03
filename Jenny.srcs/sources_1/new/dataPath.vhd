@@ -98,11 +98,19 @@ end component;
 begin
 -- Data path buses and hardware
     one     <= const_zero(12 downto 1) & X"1";
-    pcjump  <= instr(15 downto 0);
-    ar      <= instr(5  downto 0);
-    br      <= instr(11 downto 6);
-    wr      <= instr(17 downto 12);
-    immData <= instr(21 downto 6);
+    process(clk) is
+    begin
+        pcjump  <= instr(15 downto 0);
+        if (CUimmCalc = '1') then
+            ar <= instr(21 downto 16);
+            br      <= "000000";
+        else
+            ar  <= instr(15  downto 10);
+            br <= instr(9 downto 4);
+        end if;
+        wr      <= instr(21 downto 16);
+        immData <= instr(15 downto 0);
+    end process;
 
     immSignExtend:     signExtender generic map(32) port map(a => immData,y => immData32);
     pcCLK:             flipFlop     generic map(16) port map(clk => clk, reset => reset, d => pcnext, q => addr);

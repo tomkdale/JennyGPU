@@ -26,7 +26,7 @@ signal alucontrol: STD_LOGIC_VECTOR(3  downto 0);
 begin
 clkprocess :process
  begin
-    instr <= "11110010010000000000001000000001";
+    instr <= "11110010000000000000001000000001";
     wait for 10ns;
 
 end process;
