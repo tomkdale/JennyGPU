@@ -52,9 +52,9 @@ begin
     end process;
     cu: controlUnit port map(reset=>reset,instr=>instr,rot=>rot,CUreg0enable=>CUreg0enable,
         CUreg1enable=>CUreg1enable,CUreg2enable=>CUreg2enable,CUreg3enable=>CUreg3enable,CUbranch=>CUbranch,CUbranchDataWrite=>CUbranchDataWrite,
-        CUimmCalc=>CUimmCalc,CUbranchZero=>CUbranchZero,CUload=>CUload,CUdataMemWrite=>CUdataMemWrite); 
+        CUimmCalc=>CUimmCalc,CUbranchZero=>CUbranchZero,CUload=>CUload,CUdataMemWrite=>CUdataMemWrite,alucontrol=>alucontrol); 
     instructionMem: imem port map(addr=>addr,instr=>instr);
-    dp: datapath port map(clk=>clk,reset=>reset,instr=>instr(31 downto 0),addr=>addr,data0=>data0,data1=>data1,data2=>data2,data3=>data3,rot=>rot,CUbranch=>CUbranch,CUbranchDataWrite=>CUbranchDataWrite,CUreg0enable=>CUreg0enable,
+    dp: datapath port map(clk=>clk,reset=>reset,instr=>instr,addr=>addr,data0=>data0,data1=>data1,data2=>data2,data3=>data3,rot=>rot,CUbranch=>CUbranch,CUbranchDataWrite=>CUbranchDataWrite,CUreg0enable=>CUreg0enable,
     CUreg1enable=>CUreg1enable,CUreg2enable=>CUreg2enable,CUreg3enable=>CUreg3enable,CUimmCalc=>CUimmCalc,CUbranchZero=>CUbranchZero,CUload=>CUload,
     CUdataMemWrite=>CUdataMemWrite,alucontrol=>alucontrol);
     

@@ -29,12 +29,12 @@ begin
            when others => allcontrol <= "0000000000000000";
     end case;
     end process;
- CUreg0enable<= allcontrol(15);
- CUreg1enable<=allcontrol(14);
- CUreg2enable<=allcontrol(13);
- CUreg3enable<=allcontrol(12);
- CUbranch<=allcontrol(11);
- CUbranchDataWrite<=allcontrol(10);
+  CUreg0enable<= allcontrol(15);
+  CUreg1enable<=allcontrol(14);
+  CUreg2enable<=allcontrol(13);
+  CUreg3enable<=allcontrol(12);
+  CUbranch<=allcontrol(11);
+  CUbranchDataWrite<=allcontrol(10);
   CUimmCalc<=allcontrol(9);
   CUbranchZero<=allcontrol(8);
   CUload<=allcontrol(7);
