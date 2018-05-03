@@ -4,16 +4,16 @@ use IEEE.NUMERIC_STD.all;
 -- dataPath Unit for the Jenny GPU
 
 entity dataPath is
- port(clk,reset:        in     STD_LOGIC;
-          instr:             in     STD_LOGIC_VECTOR(31 downto 0);
-          addr:              in    STD_LOGIC_VECTOR(15 downto 0);
-          addrnext:        out STD_LOGIC_VECTOR(15 downto 0);
-          data0,data1,data2,data3:             out    STD_LOGIC_VECTOR(31 downto 0);
+ port(clk,reset:    in  STD_LOGIC;
+          instr:    in  STD_LOGIC_VECTOR(31 downto 0);
+          addr:     in  STD_LOGIC_VECTOR(15 downto 0);
+          addrnext: out STD_LOGIC_VECTOR(15 downto 0);
+          data0, data1, data2, data3: out    STD_LOGIC_VECTOR(31 downto 0);
           -- Control unit signals
-          CUbranch,CUbranchDataWrite,CUreg0enable,CUreg1enable,CUreg2enable,CUreg3enable:   in STD_LOGIC;
-          CUimmCalc,CUbranchZero,CUload,CUdataMemWrite:        in STD_LOGIC;
-          rot:               in STD_LOGIC_VECTOR(1 downto 0);
-          alucontrol:        in     STD_LOGIC_VECTOR(3  downto 0));
+          CUbranch, CUbranchDataWrite, CUreg0enable, CUreg1enable, CUreg2enable, CUreg3enable: in STD_LOGIC;
+          CUimmCalc, CUbranchZero, CUload, CUdataMemWrite: in STD_LOGIC;
+          rot:        in STD_LOGIC_VECTOR(1 downto 0);
+          alucontrol: in STD_LOGIC_VECTOR(3 downto 0));
 end;
 
 architecture struct of dataPath is
@@ -31,14 +31,14 @@ end component;
          we:       in  STD_LOGIC; -- Write enable bit
          ar,br,wr: in  STD_LOGIC_VECTOR(5  downto 0);  -- Register addresses
          wd:       in  STD_LOGIC_VECTOR(31 downto 0);  -- Data write
-         ad,bd:    out STD_LOGIC_VECTOR(31 downto 0)); -- Register values
+         ad, bd:   out STD_LOGIC_VECTOR(31 downto 0)); -- Register values
     end component;
 
  -- The datapath needs a register file to store saved branch locations and other scalar data
  component branchFile
-    port(clk: in STD_LOGIC;
+    port(clk: in  STD_LOGIC;
          we:  in  STD_LOGIC;
-         ar:  in  STD_LOGIC_VECTOR( 5 downto 0);
+         ar:  in  STD_LOGIC_VECTOR(5  downto 0);
          wd:  in  STD_LOGIC_VECTOR(15 downto 0);
          ad:  out STD_LOGIC_VECTOR(15 downto 0));
     end component;
@@ -65,18 +65,17 @@ end component;
     end component;
 
     component rotator -- Rotator moves the a registers between ALUs
-        port(a0, a1, a2, a3:    in    STD_LOGIC_VECTOR(31 downto 0);
-            rot:                in    STD_LOGIC_VECTOR(1  downto 0);
-            -- New a values (values after rotation)
-            a0n, a1n, a2n, a3n: out STD_LOGIC_VECTOR(31 downto 0));
+        port(a0, a1, a2, a3:    in  STD_LOGIC_VECTOR(31 downto 0);
+            rot:                in  STD_LOGIC_VECTOR(1  downto 0);
+            a0n, a1n, a2n, a3n: out STD_LOGIC_VECTOR(31 downto 0)); -- New a values (values after rotation)
     end component;
     component dmem is -- Data memory
-      port(clk:  in  STD_LOGIC;
-           load:   in  STD_LOGIC;
-           save:   in  STD_LOGIC;
-           dat:  in  STD_LOGIC_VECTOR(127 downto 0);
+      port(clk:      in  STD_LOGIC;
+           load:     in  STD_LOGIC;
+           save:     in  STD_LOGIC;
+           dat:      in  STD_LOGIC_VECTOR(127 downto 0);
            dataaddr: in  STD_LOGIC_VECTOR(15  downto 0);
-           rd:   out STD_LOGIC_VECTOR(127 downto 0));
+           rd:       out STD_LOGIC_VECTOR(127 downto 0));
     end component;
 
     -- Data path signals

@@ -12,7 +12,7 @@ architecture behave of signExtender is
   signal const_zero : STD_LOGIC_VECTOR((width-1) downto 0) := (others => '0');
   signal const_neg : STD_LOGIC_VECTOR((width-1) downto 0) := (others => '1');
 begin
-  process( a, const_zero, const_neg )
+  process(a, const_zero, const_neg)
   begin
     if a((width/2)-1) = '0' then
         y <= const_zero((width-1) downto (width/2)) & a;
