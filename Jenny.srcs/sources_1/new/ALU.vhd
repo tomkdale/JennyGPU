@@ -115,6 +115,7 @@ with alucontrol(2 downto 0) select result <=
   quotient    when "100",
   slt         when "101",
   modulus     when "110",
+  a           when "111",
   const_zero  when others;
 
 -- Set the zero flag if result is 0
