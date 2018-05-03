@@ -57,7 +57,7 @@ architecture behave of imem is
     end function;
     
     -- Use the impure function to read RAM from a file and store in the FPGA's ram memory
-    signal mem: ramtype := InitRamFromFile("memfile2.dat");
+    signal mem: ramtype := InitRamFromFile("memfile1.dat");
     
     begin
     
