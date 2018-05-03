@@ -116,7 +116,7 @@ def run_assembler():
                 reg_enable = args[4]
                 reg1 = registers[args[1]]
                 reg2 = registers[args[2]]
-                rot = '{:0{width}b}'.format(int(args[3]), width=4)
+                rot = '{:0{width}b}'.format(int(args[3]), width=2)
                 outputBinary = reg_enable_to_binary(reg_enable) + op_code + reg1 + reg2 + rot + "00000000"
                 outputHex = binToHex(outputBinary)
                 print(outputBinary, outputHex)

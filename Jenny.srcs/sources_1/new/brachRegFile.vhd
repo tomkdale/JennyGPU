@@ -17,21 +17,22 @@ end;
 
 architecture behave of branchFile is
 
-  type ramtype is array (64 downto 0) of STD_LOGIC_VECTOR(15 downto 0);
-  signal mem: ramtype;
-begin
+    type ramtype is array (64 downto 0) of STD_LOGIC_VECTOR(15 downto 0);
+    signal mem: ramtype;
 
-  process(clk) begin
-  -- Saves branch data to register address
-    if rising_edge(clk) then
-		if we = '1' then
-			mem(to_integer(unsigned(ar))) <= wd;
-		end if;
-    end if;
-  end process;
+    begin
 
-  -- Gets branch data from register address
-  process(ar, mem) begin
-		ad <= mem(to_integer( unsigned(ar)));
-  end process;
+    -- Saves branch data to register address
+    process(clk) begin
+        if rising_edge(clk) then
+            if we = '1' then
+                mem(to_integer(unsigned(ar))) <= wd;
+            end if;
+        end if;
+    end process;
+        
+    -- Gets branch data from register address
+    process(ar, mem) begin
+        ad <= mem(to_integer( unsigned(ar)));
+    end process;
 end;
