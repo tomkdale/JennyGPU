@@ -95,7 +95,9 @@ begin -- Data path buses and hardware
   
     one     <= const_zero(12 downto 1) & X"1";
     pcjump  <= instr(15 downto 0);
-    ar      <= instr(21 downto 16) when CUimmCalc = '1' else instr(15  downto 10);
+    ar <= instr(21 downto 16) when CUimmCalc = '1' else
+     instr(21 downto 16) when CUdatamemwrite = '1' else
+      instr(15  downto 10);
     br      <= "000000" when CUimmCalc ='1' else instr(9 downto 4);
     wr      <= instr(21 downto 16);
     immData <= instr(15 downto 0);
@@ -122,10 +124,10 @@ begin -- Data path buses and hardware
 
     doJump <= z0 and z1 and z2 and z3 and CUbranchZero;
 
-    wd0mux: mux2 generic map(32) port map(d0 => aluresult0, d1 => loadMem(31  downto  0), s => CUdatamemwrite, y => reg0WD);
-    wd1mux: mux2 generic map(32) port map(d0 => aluresult1, d1 => loadMem(63  downto 32), s => CUdatamemwrite, y => reg1WD);
-    wd2mux: mux2 generic map(32) port map(d0 => aluresult2, d1 => loadMem(95  downto 64), s => CUdatamemwrite, y => reg2WD);
-    wd3mux: mux2 generic map(32) port map(d0 => aluresult3, d1 => loadMem(127 downto 96), s => CUdatamemwrite, y => reg3WD);
+    wd0mux: mux2 generic map(32) port map(d0 => aluresult0, d1 => loadMem(31  downto  0), s => CUload, y => reg0WD);
+    wd1mux: mux2 generic map(32) port map(d0 => aluresult1, d1 => loadMem(63  downto 32), s => CUload, y => reg1WD);
+    wd2mux: mux2 generic map(32) port map(d0 => aluresult2, d1 => loadMem(95  downto 64), s => CUload, y => reg2WD);
+    wd3mux: mux2 generic map(32) port map(d0 => aluresult3, d1 => loadMem(127 downto 96), s => CUload, y => reg3WD);
 
     saveMem <= aluresult0 & aluresult1 & aluresult2 & aluresult3;
     dataMemory: dmem port map(clk => clk, load => CUload, save => CUdatamemwrite, dat => saveMem, dataaddr => immData, rd => loadMem);
