@@ -38,7 +38,7 @@ end component;
  component branchFile
     port(clk: in  STD_LOGIC;
          we:  in  STD_LOGIC;
-         ar:  in  STD_LOGIC_VECTOR(5  downto 0);
+         wr:  in  STD_LOGIC_VECTOR(5  downto 0);
          wd:  in  STD_LOGIC_VECTOR(15 downto 0);
          ad:  out STD_LOGIC_VECTOR(15 downto 0));
     end component;
@@ -90,6 +90,7 @@ end component;
     signal z0, z1, z2, z3: STD_LOGIC; --zero results from each alu
     signal loadMem: STD_LOGIC_VECTOR(127 downto 0);
     signal saveMem: STD_LOGIC_VECTOR(127 downto 0);
+    signal branchIncrement: STD_LOGIC_VECTOR(15 downto 0);
 
 begin -- Data path buses and hardware
   
@@ -101,12 +102,13 @@ begin -- Data path buses and hardware
     br      <= "000000" when CUimmCalc ='1' else instr(9 downto 4);
     wr      <= instr(21 downto 16);
     immData <= instr(15 downto 0);
-
+    
     immSignExtend:     signExtender generic map(32) port map(a => immData,y => immData32);
     pcIncrement:       adder        generic map(16) port map(a => addr, b => one, y => pcplus);
     branchNobranchmux: mux2         generic map(16) port map(d0 => pcplus, d1 => pcbranch, s => CUbranch, y => addrnext);
     jumpBranchmux:     mux2         generic map(16) port map(d0 => pcjump, d1 => pcnextbranch, s => doJump, y => pcbranch);
-    branchRegFile:     branchFile   port    map(clk => clk, we => CUbranchDataWrite, ar => ar, wd => immData, ad => pcnextbranch);
+    calcBranch:        adder        generic map(16) port map (a=>branchIncrement,b=>addr,y=>pcnextbranch);
+    branchRegFile:     branchFile   port    map(clk => clk, we => CUbranchDataWrite, wr => wr, wd => immData, ad => branchIncrement);
 
     rf0:     dataRegFile port    map(clk => clk, we => CUreg0enable, ar => ar, br => br, wr=> wr, wd => reg0WD, ad => a0, bd => b0);
     rf1:     dataRegFile port    map(clk => clk, we => CUreg1enable, ar => ar, br => br, wr=> wr, wd => reg1WD, ad => a1, bd => b1);

@@ -20,12 +20,14 @@ begin
            when  "000010" => allcontrol <= instr(31 downto 28) & "000000000011" ; --vmult
            when  "000011" => allcontrol <= instr(31 downto 28) & "000000000100"; --vdiv
            when  "000100" => allcontrol <= instr(31 downto 28) & "000000000101"; --vmod
-           when  "000101" => allcontrol <= instr(31 downto 28) & "100100000110"; --blt
+           when  "000101" => allcontrol <= instr(31 downto 28) & "100100000101"; --blt
            when  "000110" => allcontrol <= instr(31 downto 28) & "000000" & instr(9 downto 8) & "0111";--rotate
            when  "000111" => allcontrol <=                       "0000100000000000"; --jump
            when  "001000" => allcontrol <= instr(31 downto 28) & "001000000010"; --vaddi
            when  "001001" => allcontrol <= instr(31 downto 28) & "000010000111"; --loadv
            when  "001010" => allcontrol <= instr(31 downto 28) & "000001000111"; --savev
+           when  "001011" => allcontrol <= "0000010000000000";--setb
+           when  "001100" => allcontrol <= "0000100100000000";--br
            when others => allcontrol <= "0000000000000000";
     end case;
     end process;
