@@ -20,7 +20,7 @@ begin
            when  "000010" => allcontrol <= instr(31 downto 28) & "000000000011" ; --vmult
            when  "000011" => allcontrol <= instr(31 downto 28) & "000000000100"; --vdiv
            when  "000100" => allcontrol <= instr(31 downto 28) & "000000000101"; --vmod
-           when  "000101" => allcontrol <= instr(31 downto 28) & "100100000101"; --blt
+           when  "000101" => allcontrol <= instr(31 downto 28) & "100100001101"; --blt
            when  "000110" => allcontrol <= instr(31 downto 28) & "000000" & instr(9 downto 8) & "0111";--rotate
            when  "000111" => allcontrol <=                       "0000100000000000"; --jump
            when  "001000" => allcontrol <= instr(31 downto 28) & "001000000010"; --vaddi
@@ -43,6 +43,4 @@ begin
   CUdataMemWrite    <= allcontrol(6);
   rot               <= allcontrol(5 downto 4);
   alucontrol        <= allcontrol(3 downto 0);
-
-
 end Behavioral;

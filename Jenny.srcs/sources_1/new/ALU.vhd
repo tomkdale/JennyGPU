@@ -104,7 +104,7 @@ modulus <= a16;
 quotient <= "0000000000000000" & q;
 
 -- slt should be 1 if most significant bit of sum is 1
-slt <= ( const_zero(31 downto 1) & '1') when sum(31) = '1' else (others =>'0');
+slt <= ( const_zero(31 downto 1) & '1') when sum(31) = '0' else (others =>'0');
 
 
 with alucontrol(2 downto 0) select result <=

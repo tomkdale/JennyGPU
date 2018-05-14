@@ -87,7 +87,7 @@ end component;
     signal reg0WD, reg1WD, reg2WD, reg3WD: STD_LOGIC_VECTOR(31 downto 0);
     signal a0, a1, a2, a3, a0n, a1n, a2n, a3n, b0, b1, b2, b3, b0n, b1n, b2n, b3n, immData32: STD_LOGIC_VECTOR(31 downto 0);
     signal aluResult0, aluResult1, aluResult2, aluResult3: STD_LOGIC_VECTOR(31 downto 0);
-    signal z0, z1, z2, z3: STD_LOGIC; --zero results from each alu
+    signal z0, z1, z2, z3,z0n,z1n,z2n,z3n: STD_LOGIC; --zero results from each alu
     signal loadMem: STD_LOGIC_VECTOR(127 downto 0);
     signal saveMem: STD_LOGIC_VECTOR(127 downto 0);
     signal branchIncrement: STD_LOGIC_VECTOR(15 downto 0);
@@ -105,9 +105,10 @@ begin -- Data path buses and hardware
     
     immSignExtend:     signExtender generic map(32) port map(a => immData,y => immData32);
     pcIncrement:       adder        generic map(16) port map(a => addr, b => one, y => pcplus);
-    branchNobranchmux: mux2         generic map(16) port map(d0 => pcplus, d1 => pcbranch, s => CUbranch, y => addrnext);
-    jumpBranchmux:     mux2         generic map(16) port map(d0 => pcjump, d1 => pcnextbranch, s => doJump, y => pcbranch);
+    branchNobranchmux: mux2         generic map(16) port map(d0 => pcplus, d1 => pcbranch, s => doJump, y => addrnext);
+    jumpBranchmux:     mux2         generic map(16) port map(d0 => pcjump, d1 => pcnextbranch, s => CUbranch, y => pcbranch);
     calcBranch:        adder        generic map(16) port map (a=>branchIncrement,b=>addr,y=>pcnextbranch);
+    
     branchRegFile:     branchFile   port    map(clk => clk, we => CUbranchDataWrite, wr => wr, wd => immData, ad => branchIncrement);
 
     rf0:     dataRegFile port    map(clk => clk, we => CUreg0enable, ar => ar, br => br, wr=> wr, wd => reg0WD, ad => a0, bd => b0);
@@ -123,10 +124,14 @@ begin -- Data path buses and hardware
     alu1:    alu         port    map(a => a1n, b => b1n, alucontrol => aluControl, result => aluresult1, zero => z1);
     alu2:    alu         port    map(a => a2n, b => b2n, alucontrol => aluControl, result => aluresult2, zero => z2);
     alu3:    alu         port    map(a => a3n, b => b3n, alucontrol => aluControl, result => aluresult3, zero => z3);
-
-    doJump <= z0 and z1 and z2 and z3 and CUbranchZero;
-
-    wd0mux: mux2 generic map(32) port map(d0 => aluresult0, d1 => loadMem(31  downto  0), s => CUload, y => reg0WD);
+    
+    z0n <= '1' when CUreg0enable ='0' else z0;--branch not equal command will only consider those enabled alu results
+    z1n <= '1' when CUreg1enable ='0' else z1;
+    z2n <= '1' when CUreg2enable ='0' else z2;
+    z3n <= '1' when CUreg3enable ='0' else z3;
+    doJump <= z0n and z1n and z2n and z3n and CUbranchZero;
+    
+    wd0mux: mux2 generic map(32) port map(d0 => aluresult0, d1 => loadMem(31  downto 0), s => CUload, y => reg0WD);
     wd1mux: mux2 generic map(32) port map(d0 => aluresult1, d1 => loadMem(63  downto 32), s => CUload, y => reg1WD);
     wd2mux: mux2 generic map(32) port map(d0 => aluresult2, d1 => loadMem(95  downto 64), s => CUload, y => reg2WD);
     wd3mux: mux2 generic map(32) port map(d0 => aluresult3, d1 => loadMem(127 downto 96), s => CUload, y => reg3WD);

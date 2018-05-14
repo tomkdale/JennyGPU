@@ -10,15 +10,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="180484200fs"></ZoomStartTime>
-      <ZoomEndTime time="276557900fs"></ZoomEndTime>
-      <Cursor1Time time="224050000fs"></Cursor1Time>
+      <ZoomStartTime time="186348500fs"></ZoomStartTime>
+      <ZoomEndTime time="262748501fs"></ZoomEndTime>
+      <Cursor1Time time="222812000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="148"></NameColumnWidth>
-      <ValueColumnWidth column_width="75"></ValueColumnWidth>
+      <ValueColumnWidth column_width="63"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="18" />
+   <WVObjectSize size="25" />
    <wvobject fp_name="/JennyBasicTester/jenny/dp/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -40,6 +40,22 @@
       <obj_property name="ObjectShortName">alucontrol[3:0]</obj_property>
       <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
+   <wvobject fp_name="/JennyBasicTester/jenny/dp/CUreg0enable" type="logic">
+      <obj_property name="ElementShortName">CUreg0enable</obj_property>
+      <obj_property name="ObjectShortName">CUreg0enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/JennyBasicTester/jenny/dp/CUreg1enable" type="logic">
+      <obj_property name="ElementShortName">CUreg1enable</obj_property>
+      <obj_property name="ObjectShortName">CUreg1enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/JennyBasicTester/jenny/dp/CUreg2enable" type="logic">
+      <obj_property name="ElementShortName">CUreg2enable</obj_property>
+      <obj_property name="ObjectShortName">CUreg2enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/JennyBasicTester/jenny/dp/CUreg3enable" type="logic">
+      <obj_property name="ElementShortName">CUreg3enable</obj_property>
+      <obj_property name="ObjectShortName">CUreg3enable</obj_property>
+   </wvobject>
    <wvobject fp_name="/JennyBasicTester/jenny/dp/ar" type="array">
       <obj_property name="ElementShortName">ar[5:0]</obj_property>
       <obj_property name="ObjectShortName">ar[5:0]</obj_property>
@@ -51,6 +67,7 @@
    <wvobject fp_name="/JennyBasicTester/jenny/dp/wr" type="array">
       <obj_property name="ElementShortName">wr[5:0]</obj_property>
       <obj_property name="ObjectShortName">wr[5:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/JennyBasicTester/jenny/dp/a0n" type="array">
       <obj_property name="ElementShortName">a0n[31:0]</obj_property>
@@ -77,6 +94,11 @@
       <obj_property name="ObjectShortName">aluResult2[31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
+   <wvobject fp_name="/JennyBasicTester/jenny/dp/aluResult3" type="array">
+      <obj_property name="ElementShortName">aluResult3[31:0]</obj_property>
+      <obj_property name="ObjectShortName">aluResult3[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
    <wvobject fp_name="/JennyBasicTester/jenny/dp/immData32" type="array">
       <obj_property name="ElementShortName">immData32[31:0]</obj_property>
       <obj_property name="ObjectShortName">immData32[31:0]</obj_property>
@@ -95,9 +117,21 @@
    <wvobject fp_name="/JennyBasicTester/jenny/dp/rot1/a2" type="array">
       <obj_property name="ElementShortName">a2[31:0]</obj_property>
       <obj_property name="ObjectShortName">a2[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/JennyBasicTester/jenny/dp/rot1/a3" type="array">
-      <obj_property name="ElementShortName">a3[31:0]</obj_property>
-      <obj_property name="ObjectShortName">a3[31:0]</obj_property>
+   <wvobject fp_name="/JennyBasicTester/jenny/dp/b0n" type="array">
+      <obj_property name="ElementShortName">b0n[31:0]</obj_property>
+      <obj_property name="ObjectShortName">b0n[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/JennyBasicTester/jenny/dp/b1n" type="array">
+      <obj_property name="ElementShortName">b1n[31:0]</obj_property>
+      <obj_property name="ObjectShortName">b1n[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/JennyBasicTester/jenny/dp/b2n" type="array">
+      <obj_property name="ElementShortName">b2n[31:0]</obj_property>
+      <obj_property name="ObjectShortName">b2n[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
 </wave_config>
