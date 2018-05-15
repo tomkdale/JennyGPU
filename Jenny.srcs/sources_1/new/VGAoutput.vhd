@@ -33,7 +33,12 @@ architecture Behavioral of VGAoutput is
 
 begin
 
-   vga_sync_unit: vga_sync port map(clk => clk, reset => resetSW, hsync => 
+   vga_sync_unit: vga_sync port map(clk => clk, reset => resetSW, hsync => hsync, vsync => vsync, pixel_x => pixel_x, pixel_y => pixel_y, video_on => video_on, p_tick => pixel_tick);
+
+  process ( pixel_x, pixel_y )
+  begin
+    
+  end process;
 
 --print points to screen and make lines between them
  -- generate r,g,b registers
