@@ -13,20 +13,29 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity JennyBasicTester is
+    port(resetSW : in STD_LOGIC;
+        VGA_R, VGA_G, VGA_B: out STD_LOGIC_VECTOR(3 downto 0);
+        VGA_HS, VGA_VS: out STD_LOGIC);
 end JennyBasicTester;
 
 architecture Behavioral of JennyBasicTester is
     component jenny_top is
       Port (clk, reset: in STD_LOGIC;
-           data0, data1, data2, data3: out STD_LOGIC_VECTOR(31 downto 0)
+           data0, data1, data2, data3: out STD_LOGIC_VECTOR(31 downto 0);
+           resetSW: in STD_LOGIC;
+           red, green, blue: out STD_LOGIC_VECTOR(3 downto 0);
+           hsync, vsync: out STD_LOGIC
             );
     end component;
-    signal reset,clk :STD_LOGIC;
+    signal reset, clk :STD_LOGIC;
     signal data0, data1, data2, data3: STD_LOGIC_VECTOR(31 downto 0);
                
 begin
 
-    jenny: jenny_top port map(clk => clk, reset => reset, data0 => data0, data1 => data1, data2 => data2, data3 => data3);
+    jenny: jenny_top port map(clk => clk, reset => reset,
+    data0 => data0, data1 => data1, data2 => data2, data3 => data3,
+    resetSW => resetSW,
+    red => VGA_R, green => VGA_G, blue => VGA_B, hsync => VGA_HS, vsync => VGA_VS);
     
     process begin
         clk <= '1';

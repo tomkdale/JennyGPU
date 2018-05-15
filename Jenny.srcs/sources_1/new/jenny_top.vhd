@@ -6,8 +6,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity jenny_top is
   Port (clk, reset: in STD_LOGIC;
-       data0, data1, data2, data3: out STD_LOGIC_VECTOR(31 downto 0)
-        );
+       data0, data1, data2, data3: out STD_LOGIC_VECTOR(31 downto 0);
+       resetSW: in STD_LOGIC;
+       red, green, blue: out STD_LOGIC_VECTOR(3 downto 0);
+       hsync, vsync: out STD_LOGIC
+       );
 end jenny_top;
 
 architecture Behavioral of jenny_top is
@@ -46,6 +49,14 @@ architecture Behavioral of jenny_top is
                       q: out STD_LOGIC_VECTOR((width-1) downto 0));
       end component;
       
+      component vga_out is
+         Port (clk: in STD_LOGIC;
+               resetSW: in STD_LOGIC;
+               hsync, vsync: out STD_LOGIC;
+               point1x,point2x,point3x,point4x,point5x,point6x,point7x,point8x: in STD_LOGIC_VECTOR(32 downto 0);
+               point1y,point2y,point3y,point4y,point5y,point6y,point7y,point8y: in STD_LOGIC_VECTOR(32 downto 0));
+        end component;
+      
      signal addr:     STD_LOGIC_VECTOR(15 downto 0);
      signal addrnext: STD_LOGIC_VECTOR(15 downto 0);
      signal instr:    STD_LOGIC_VECTOR(31 downto 0);
@@ -68,5 +79,7 @@ begin
     
    pcCLK: flipFlop generic map(16) port map(clk => clk, reset => reset, d => addrnext, q => addr);
 
+ 
+ 
  
 end Behavioral;
