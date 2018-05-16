@@ -68,6 +68,8 @@ architecture Behavioral of jenny_top is
     signal p1x, p2x, p3x, p4x, p5x, p6x, p7x, p8x: STD_LOGIC_VECTOR(31 downto 0);
     signal p1y, p2y, p3y, p4y, p5y, p6y, p7y, p8y: STD_LOGIC_VECTOR(31 downto 0);
     signal reset: STD_LOGIC := '0';
+    --signal clkn: STD_LOGIC;
+    --signal clkcounter: STD_LOGIC_VECTOR(31 downto 0);
 begin
 
     cu: controlUnit port map(reset => reset, instr => instr, rot => rot, CUreg0enable => CUreg0enable,
