@@ -98,6 +98,7 @@ begin -- Data path buses and hardware
     pcjump  <= instr(15 downto 0);
     ar <= instr(21 downto 16) when CUimmCalc = '1' else
      instr(21 downto 16) when CUdatamemwrite = '1' else
+     instr(21 downto 16) when CUdatamemwrite = '1' else
       instr(15  downto 10);
     br      <= "000000" when CUimmCalc ='1' else instr(9 downto 4);
     wr      <= instr(21 downto 16);
