@@ -8,12 +8,13 @@ entity dataPath is
           instr:    in  STD_LOGIC_VECTOR(31 downto 0);
           addr:     in  STD_LOGIC_VECTOR(15 downto 0);
           addrnext: out STD_LOGIC_VECTOR(15 downto 0);
-          data0, data1, data2, data3: out    STD_LOGIC_VECTOR(31 downto 0);
           -- Control unit signals
           CUbranch, CUbranchDataWrite, CUreg0enable, CUreg1enable, CUreg2enable, CUreg3enable: in STD_LOGIC;
           CUimmCalc, CUbranchZero, CUload, CUdataMemWrite: in STD_LOGIC;
           rot:        in STD_LOGIC_VECTOR(1 downto 0);
-          alucontrol: in STD_LOGIC_VECTOR(3 downto 0));
+          alucontrol: in STD_LOGIC_VECTOR(3 downto 0);
+          point1x,point2x,point3x,point4x,point5x,point6x,point7x,point8x: out STD_LOGIC_VECTOR(31 downto 0);
+          point1y,point2y,point3y,point4y,point5y,point6y,point7y,point8y: out STD_LOGIC_VECTOR(31 downto 0));
 end;
 
 architecture struct of dataPath is
@@ -75,12 +76,14 @@ end component;
            save:     in  STD_LOGIC;
            dat:      in  STD_LOGIC_VECTOR(127 downto 0);
            dataaddr: in  STD_LOGIC_VECTOR(15  downto 0);
-           rd:       out STD_LOGIC_VECTOR(127 downto 0));
+           rd:       out STD_LOGIC_VECTOR(127 downto 0);
+           point1x,point2x,point3x,point4x,point5x,point6x,point7x,point8x: out STD_LOGIC_VECTOR(31 downto 0);
+           point1y,point2y,point3y,point4y,point5y,point6y,point7y,point8y: out STD_LOGIC_VECTOR(31 downto 0));
     end component;
 
     -- Data path signals
     signal doJump: STD_LOGIC;
-    signal pcplus, pcjump, pcbranch, pcnextbranch, immData: STD_LOGIC_VECTOR(15 downto 0);
+    signal pcplus, pcjump, pcbranch, pcnextbranch, immData,middleaddr: STD_LOGIC_VECTOR(15 downto 0);
     signal one: STD_LOGIC_VECTOR(15 downto 0);
     signal const_zero: STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
     signal ar, br, wr: STD_LOGIC_VECTOR(5 downto 0);
@@ -105,8 +108,9 @@ begin -- Data path buses and hardware
     
     immSignExtend:     signExtender generic map(32) port map(a => immData,y => immData32);
     pcIncrement:       adder        generic map(16) port map(a => addr, b => one, y => pcplus);
-    branchNobranchmux: mux2         generic map(16) port map(d0 => pcplus, d1 => pcbranch, s => doJump, y => addrnext);
-    jumpBranchmux:     mux2         generic map(16) port map(d0 => pcjump, d1 => pcnextbranch, s => CUbranch, y => pcbranch);
+    branchNobranchmux: mux2         generic map(16) port map(d0 => pcbranch, d1 => middleaddr, s => cubranchzero, y => addrnext);
+    middlemux:         mux2         generic map(16) port map(d0 =>pcplus, d1 =>pcnextbranch, s =>dojump, y=>middleaddr);
+    jumpBranchmux:     mux2         generic map(16) port map(d0 => pcplus, d1 => pcjump, s => CUbranch, y => pcbranch);
     calcBranch:        adder        generic map(16) port map (a=>branchIncrement,b=>addr,y=>pcnextbranch);
     
     branchRegFile:     branchFile   port    map(clk => clk, we => CUbranchDataWrite, wr => wr, wd => immData, ad => branchIncrement);
@@ -137,11 +141,8 @@ begin -- Data path buses and hardware
     wd3mux: mux2 generic map(32) port map(d0 => aluresult3, d1 => loadMem(127 downto 96), s => CUload, y => reg3WD);
 
     saveMem <= aluresult0 & aluresult1 & aluresult2 & aluresult3;
-    dataMemory: dmem port map(clk => clk, load => CUload, save => CUdatamemwrite, dat => saveMem, dataaddr => immData, rd => loadMem);
-
-    data0 <= aluresult0; --for outputting data to VGA down the road
-    data1 <= aluresult1;
-    data2 <= aluresult2;
-    data3 <= aluresult3;
+    dataMemory: dmem port map(clk => clk, load => CUload, save => CUdatamemwrite, dat => saveMem, dataaddr => immData, rd => loadMem,
+    point1x => point1x, point2x => point2x, point3x => point3x, point4x => point4x, point5x => point5x, point6x => point6x, point7x => point7x, point8x => point8x,
+    point1y => point1y, point2y => point2y, point3y => point3y, point4y => point4y, point5y => point5y, point6y => point6y, point7y => point7y, point8y => point8y);
 
 end struct;

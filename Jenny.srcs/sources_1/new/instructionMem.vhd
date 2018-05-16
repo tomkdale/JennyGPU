@@ -57,7 +57,7 @@ architecture behave of imem is
     end function;
     
     -- Use the impure function to read RAM from a file and store in the FPGA's ram memory
-    signal mem: ramtype := InitRamFromFile("moveCube2.dat");
+    signal mem: ramtype := InitRamFromFile("vgasimple.dat");
     
     begin
     
@@ -65,5 +65,5 @@ architecture behave of imem is
     begin
         instr <= mem(to_integer(unsigned(addr)));
     end process;
-    
+     
 end behave;
