@@ -13,7 +13,9 @@ entity dataPath is
           CUbranch, CUbranchDataWrite, CUreg0enable, CUreg1enable, CUreg2enable, CUreg3enable: in STD_LOGIC;
           CUimmCalc, CUbranchZero, CUload, CUdataMemWrite: in STD_LOGIC;
           rot:        in STD_LOGIC_VECTOR(1 downto 0);
-          alucontrol: in STD_LOGIC_VECTOR(3 downto 0));
+          alucontrol: in STD_LOGIC_VECTOR(3 downto 0);
+          point1x,point2x,point3x,point4x,point5x,point6x,point7x,point8x: out STD_LOGIC_VECTOR(31 downto 0);
+          point1y,point2y,point3y,point4y,point5y,point6y,point7y,point8y: out STD_LOGIC_VECTOR(31 downto 0));
 end;
 
 architecture struct of dataPath is
@@ -75,7 +77,9 @@ end component;
            save:     in  STD_LOGIC;
            dat:      in  STD_LOGIC_VECTOR(127 downto 0);
            dataaddr: in  STD_LOGIC_VECTOR(15  downto 0);
-           rd:       out STD_LOGIC_VECTOR(127 downto 0));
+           rd:       out STD_LOGIC_VECTOR(127 downto 0);
+           point1x,point2x,point3x,point4x,point5x,point6x,point7x,point8x: out STD_LOGIC_VECTOR(31 downto 0);
+           point1y,point2y,point3y,point4y,point5y,point6y,point7y,point8y: out STD_LOGIC_VECTOR(31 downto 0));
     end component;
 
     -- Data path signals
@@ -138,7 +142,9 @@ begin -- Data path buses and hardware
     wd3mux: mux2 generic map(32) port map(d0 => aluresult3, d1 => loadMem(127 downto 96), s => CUload, y => reg3WD);
 
     saveMem <= aluresult0 & aluresult1 & aluresult2 & aluresult3;
-    dataMemory: dmem port map(clk => clk, load => CUload, save => CUdatamemwrite, dat => saveMem, dataaddr => immData, rd => loadMem);
+    dataMemory: dmem port map(clk => clk, load => CUload, save => CUdatamemwrite, dat => saveMem, dataaddr => immData, rd => loadMem,
+    point1x => point1x, point2x => point2x, point3x => point3x, point4x => point4x, point5x => point5x, point6x => point6x, point7x => point7x, point8x => point8x,
+    point1y => point1y, point2y => point2y, point3y => point3y, point4y => point4y, point5y => point5y, point6y => point6y, point7y => point7y, point8y => point8y);
 
     data0 <= aluresult0; --for outputting data to VGA down the road
     data1 <= aluresult1;

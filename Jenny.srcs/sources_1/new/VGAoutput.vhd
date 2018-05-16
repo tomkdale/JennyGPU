@@ -6,8 +6,9 @@ entity VGAoutput is
       Port (clk: in STD_LOGIC;
             resetSW: in STD_LOGIC;
             hsync, vsync: out STD_LOGIC;
-            point1x,point2x,point3x,point4x,point5x,point6x,point7x,point8x: in STD_LOGIC_VECTOR(32 downto 0);
-            point1y,point2y,point3y,point4y,point5y,point6y,point7y,point8y: in STD_LOGIC_VECTOR(32 downto 0) );
+            red, green, blue: out STD_LOGIC_VECTOR(3 downto 0);
+            point1x,point2x,point3x,point4x,point5x,point6x,point7x,point8x: in STD_LOGIC_VECTOR(31 downto 0);
+            point1y,point2y,point3y,point4y,point5y,point6y,point7y,point8y: in STD_LOGIC_VECTOR(31 downto 0));
             --file takes in coordinates for all points calculated by JENNY
             
             --also take in and put out VGA stuff.
@@ -57,9 +58,9 @@ begin
      end if;
   end process;
   
---  red <= STD_LOGIC_VECTOR(red_reg);
---  green <= STD_LOGIC_VECTOR(green_reg); 
---  blue <= STD_LOGIC_VECTOR(blue_reg);
+  red <= STD_LOGIC_VECTOR(red_reg);
+  green <= STD_LOGIC_VECTOR(green_reg); 
+  blue <= STD_LOGIC_VECTOR(blue_reg);
 
 
 end Behavioral;
