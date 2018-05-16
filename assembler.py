@@ -33,6 +33,17 @@ registers = {
     "b9":  "100001"
 }
 
+choice = "2"
+
+
+def print_binary_and_hex(binary_out, hex_out):
+    if choice == "0":
+        print(binary_out)
+    elif choice == "1":
+        print(hex_out)
+    else:
+        print(binary_out + " " + hex_out)
+
 
 def strip_commas(arguments):
     output = []
@@ -90,36 +101,37 @@ def run_assembler():
             if operation == "vadd":
                 op_code = "000000"
                 vals = from_three_regs_and_reg_enable(op_code, args[1], args[2], args[3], args[4])
-                print(vals[0] + " " + vals[1])
+                print_binary_and_hex(vals[0], vals[1])
 
             elif operation == "vsub":
                 op_code = "000001"
                 vals = from_three_regs_and_reg_enable(op_code, args[1], args[2], args[3], args[4])
-                print(vals[0] + " " + vals[1])
+                print_binary_and_hex(vals[0], vals[1])
 
             elif operation == "vmult":
                 op_code = "000010"
                 vals = from_three_regs_and_reg_enable(op_code, args[1], args[2], args[3], args[4])
-                print(vals[0] + " " + vals[1])
+                print_binary_and_hex(vals[0], vals[1])
 
             elif operation == "vdiv":
                 op_code = "000011"
                 vals = from_three_regs_and_reg_enable(op_code, args[1], args[2], args[3], args[4])
-                print(vals[0] + " " + vals[1])
+                print_binary_and_hex(vals[0], vals[1])
 
             elif operation == "vmod":
                 op_code = "000100"
                 vals = from_three_regs_and_reg_enable(op_code, args[1], args[2], args[3], args[4])
-                print(vals[0] + " " + vals[1])
+                print_binary_and_hex(vals[0], vals[1])
 
             elif operation == "blt":
                 op_code = "000101"
-                reg_enable = args[3]
-                reg1 = registers[args[1]]
-                reg2 = registers[args[2]]
-                outputBinary = reg_enable_to_binary(reg_enable) + op_code + reg1 + reg2 + "0000000000"
+                reg_enable = args[4]
+                br_reg = registers[args[1]]
+                reg1 = registers[args[2]]
+                reg2 = registers[args[3]]
+                outputBinary = reg_enable_to_binary(reg_enable) + op_code + br_reg + reg1 + reg2 + "0000"
                 outputHex = binToHex(outputBinary)
-                print(outputBinary, outputHex)
+                print_binary_and_hex(outputBinary, outputHex)
 
             elif operation == "rot":
                 op_code = "000110"
@@ -129,7 +141,7 @@ def run_assembler():
                 rot = '{:0{width}b}'.format(int(args[3]), width=2)
                 outputBinary = reg_enable_to_binary(reg_enable) + op_code + reg1 + reg2 + rot + "00000000"
                 outputHex = binToHex(outputBinary)
-                print(outputBinary, outputHex)
+                print_binary_and_hex(outputBinary, outputHex)
 
             elif operation == "j":
                 op_code = "000111"
@@ -142,27 +154,64 @@ def run_assembler():
                     destination = '{:0{width}b}'.format(int(immediate), width=16)
                 outputBinary = "0000" + op_code + "000000" + destination
                 outputHex = binToHex(outputBinary)
-                print(outputBinary, outputHex)
+                print_binary_and_hex(outputBinary, outputHex)
 
             elif operation == "vaddi":
                 op_code = "001000"
                 vals = from_immediate_and_reg_enable(op_code, args[1], args[2], args[3])
-                print(vals[0] + " " + vals[1])
+                print_binary_and_hex(vals[0], vals[1])
 
             elif operation == "loadv":
                 op_code = "001001"
                 vals = from_immediate_and_reg_enable(op_code, args[1], args[2], args[3])
-                print(vals[0] + " " + vals[1])
+                print_binary_and_hex(vals[0], vals[1])
 
             elif operation == "savev":
                 op_code = "001010"
                 vals = from_immediate_and_reg_enable(op_code, args[1], args[2], args[3])
-                print(vals[0] + " " + vals[1])
+                print_binary_and_hex(vals[0], vals[1])
+
+            elif operation == "setb":
+                op_code = "001011"
+                reg1 = registers[args[1]]
+
+                immediate = args[2]
+                if immediate.startswith("0x"):  # Hex location
+                    branch = '{:0{width}b}'.format(int(immediate[2:], 16), width=16)
+                elif immediate.startswith("0b"):  # Binary location
+                    branch = '{:0{width}b}'.format(int(immediate[2:], 2), width=16)
+                else:  # Integer location
+                    branch = '{:0{width}b}'.format(int(immediate), width=16)
+
+                outputBinary = "0000" + op_code + reg1 + branch
+                outputHex = binToHex(outputBinary)
+                print_binary_and_hex(outputBinary, outputHex)
+
+            elif operation == "br":
+                op_code = "001100"
+                reg1 = registers[args[1]]
+                outputBinary = "0000" + op_code + reg1 + "0000000000000000"
+                outputHex = binToHex(outputBinary)
+                print_binary_and_hex(outputBinary, outputHex)
+
+            elif operation == "nop":
+                print_binary_and_hex("00000000000000000000000000000000", "00000000")
 
             else:
-                print("Bad instruction - Unknown instruction")
+                print("Bad instruction - Unknown instruction: " + input_)
 
         else:
-            print("Bad instruction - no args")
+            print("Bad instruction - no args with instruction: " + input_)
 
+print("What should be output?")
+print("0 - Only binary instructions")
+print("1 - Only hex instructions")
+print("2 - Both binary and hex instructions")
+input_choice = input()
+
+if input_choice == "0":
+    choice = "0"
+elif input_choice == "1":
+    choice = "1"
+print()
 run_assembler()
