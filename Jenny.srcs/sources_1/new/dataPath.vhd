@@ -80,7 +80,7 @@ end component;
 
     -- Data path signals
     signal doJump: STD_LOGIC;
-    signal pcplus, pcjump, pcbranch, pcnextbranch, immData: STD_LOGIC_VECTOR(15 downto 0);
+    signal pcplus, pcjump, pcbranch, pcnextbranch, immData,middleaddr: STD_LOGIC_VECTOR(15 downto 0);
     signal one: STD_LOGIC_VECTOR(15 downto 0);
     signal const_zero: STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
     signal ar, br, wr: STD_LOGIC_VECTOR(5 downto 0);
@@ -105,8 +105,9 @@ begin -- Data path buses and hardware
     
     immSignExtend:     signExtender generic map(32) port map(a => immData,y => immData32);
     pcIncrement:       adder        generic map(16) port map(a => addr, b => one, y => pcplus);
-    branchNobranchmux: mux2         generic map(16) port map(d0 => pcplus, d1 => pcbranch, s => doJump, y => addrnext);
-    jumpBranchmux:     mux2         generic map(16) port map(d0 => pcjump, d1 => pcnextbranch, s => CUbranch, y => pcbranch);
+    branchNobranchmux: mux2         generic map(16) port map(d0 => pcbranch, d1 => middleaddr, s => cubranchzero, y => addrnext);
+    middlemux:         mux2         generic map(16) port map(d0 =>pcplus, d1 =>pcnextbranch, s =>dojump, y=>middleaddr);
+    jumpBranchmux:     mux2         generic map(16) port map(d0 => pcplus, d1 => pcjump, s => CUbranch, y => pcbranch);
     calcBranch:        adder        generic map(16) port map (a=>branchIncrement,b=>addr,y=>pcnextbranch);
     
     branchRegFile:     branchFile   port    map(clk => clk, we => CUbranchDataWrite, wr => wr, wd => immData, ad => branchIncrement);

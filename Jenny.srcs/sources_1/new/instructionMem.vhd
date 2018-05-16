@@ -65,5 +65,5 @@ architecture behave of imem is
     begin
         instr <= mem(to_integer(unsigned(addr)));
     end process;
-    
+     
 end behave;
