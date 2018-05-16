@@ -8,7 +8,6 @@ entity dataPath is
           instr:    in  STD_LOGIC_VECTOR(31 downto 0);
           addr:     in  STD_LOGIC_VECTOR(15 downto 0);
           addrnext: out STD_LOGIC_VECTOR(15 downto 0);
-          data0, data1, data2, data3: out    STD_LOGIC_VECTOR(31 downto 0);
           -- Control unit signals
           CUbranch, CUbranchDataWrite, CUreg0enable, CUreg1enable, CUreg2enable, CUreg3enable: in STD_LOGIC;
           CUimmCalc, CUbranchZero, CUload, CUdataMemWrite: in STD_LOGIC;
@@ -145,10 +144,5 @@ begin -- Data path buses and hardware
     dataMemory: dmem port map(clk => clk, load => CUload, save => CUdatamemwrite, dat => saveMem, dataaddr => immData, rd => loadMem,
     point1x => point1x, point2x => point2x, point3x => point3x, point4x => point4x, point5x => point5x, point6x => point6x, point7x => point7x, point8x => point8x,
     point1y => point1y, point2y => point2y, point3y => point3y, point4y => point4y, point5y => point5y, point6y => point6y, point7y => point7y, point8y => point8y);
-
-    data0 <= aluresult0; --for outputting data to VGA down the road
-    data1 <= aluresult1;
-    data2 <= aluresult2;
-    data3 <= aluresult3;
 
 end struct;
