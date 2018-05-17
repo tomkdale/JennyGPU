@@ -33,6 +33,7 @@ architecture behave of dmem is
             elsif(load= '1') then
                 rd <= mem( to_integer(unsigned(dataaddr(15 downto 0))) ); -- word aligned
             end if;
+            mem(20) <= (27 downto 0 => '0') & sw(3 downto 0) & (27 downto 0 => '0') & sw(7 downto 4) & (27 downto 0 => '0') & sw(11 downto 8) & (31 downto 0=>'0');
             point1x <= mem(10)(127 downto 96);
             point1y <= mem(10)(95 downto 64);
             point2x <= mem(11)(127 downto 96);

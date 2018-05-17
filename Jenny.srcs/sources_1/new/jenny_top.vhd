@@ -78,9 +78,9 @@ begin
     begin
         if rising_edge(clk) then
             counter := counter + 1;
-            if counter = 10000000 then
+            if counter = 1000000 then
                 clkn <= '1';
-            elsif counter = 20000000 then
+            elsif counter = 2000000 then
                 clkn <= '0';
                 counter := 0;
             end if;

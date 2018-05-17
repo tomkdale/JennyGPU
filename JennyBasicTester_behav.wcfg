@@ -3,84 +3,36 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="jenny_top_behav.wdb" id="1">
+      <db_ref path="JennyBasicTester_behav.wdb" id="1">
          <top_modules>
-            <top_module name="jenny_top" />
+            <top_module name="JennyBasicTester" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="656207858fs"></ZoomStartTime>
-      <ZoomEndTime time="1068758429fs"></ZoomEndTime>
-      <Cursor1Time time="1000000000fs"></Cursor1Time>
+      <ZoomStartTime time="876099244000fs"></ZoomStartTime>
+      <ZoomEndTime time="876548674092fs"></ZoomEndTime>
+      <Cursor1Time time="30629000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="129"></NameColumnWidth>
-      <ValueColumnWidth column_width="131"></ValueColumnWidth>
+      <ValueColumnWidth column_width="127"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="16" />
-   <wvobject fp_name="/jenny_top/clk" type="logic">
+   <WVObjectSize size="4" />
+   <wvobject fp_name="/JennyBasicTester/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="/jenny_top/dp/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
+   <wvobject fp_name="/JennyBasicTester/jenny/clkn" type="logic">
+      <obj_property name="ElementShortName">clkn</obj_property>
+      <obj_property name="ObjectShortName">clkn</obj_property>
    </wvobject>
-   <wvobject fp_name="/jenny_top/dp/reset" type="logic">
-      <obj_property name="ElementShortName">reset</obj_property>
-      <obj_property name="ObjectShortName">reset</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/dp/addr" type="array">
-      <obj_property name="ElementShortName">addr[15:0]</obj_property>
-      <obj_property name="ObjectShortName">addr[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/instr" type="array">
+   <wvobject fp_name="/JennyBasicTester/jenny/instr" type="array">
       <obj_property name="ElementShortName">instr[31:0]</obj_property>
       <obj_property name="ObjectShortName">instr[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/jenny_top/dp/a0n" type="array">
-      <obj_property name="ElementShortName">a0n[31:0]</obj_property>
-      <obj_property name="ObjectShortName">a0n[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/dp/a1n" type="array">
-      <obj_property name="ElementShortName">a1n[31:0]</obj_property>
-      <obj_property name="ObjectShortName">a1n[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/dp/a2n" type="array">
-      <obj_property name="ElementShortName">a2n[31:0]</obj_property>
-      <obj_property name="ObjectShortName">a2n[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/dp/b0" type="array">
-      <obj_property name="ElementShortName">b0[31:0]</obj_property>
-      <obj_property name="ObjectShortName">b0[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/dp/b1" type="array">
-      <obj_property name="ElementShortName">b1[31:0]</obj_property>
-      <obj_property name="ObjectShortName">b1[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/dp/b2" type="array">
-      <obj_property name="ElementShortName">b2[31:0]</obj_property>
-      <obj_property name="ObjectShortName">b2[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/dp/aluResult0" type="array">
-      <obj_property name="ElementShortName">aluResult0[31:0]</obj_property>
-      <obj_property name="ObjectShortName">aluResult0[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/dp/aluResult1" type="array">
-      <obj_property name="ElementShortName">aluResult1[31:0]</obj_property>
-      <obj_property name="ObjectShortName">aluResult1[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/dp/aluResult2" type="array">
-      <obj_property name="ElementShortName">aluResult2[31:0]</obj_property>
-      <obj_property name="ObjectShortName">aluResult2[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/clk" type="logic">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/jenny_top/clkn" type="logic">
-      <obj_property name="ElementShortName">clkn</obj_property>
-      <obj_property name="ObjectShortName">clkn</obj_property>
+   <wvobject fp_name="/JennyBasicTester/jenny/addr" type="array">
+      <obj_property name="ElementShortName">addr[15:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[15:0]</obj_property>
    </wvobject>
 </wave_config>

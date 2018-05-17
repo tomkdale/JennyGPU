@@ -40,7 +40,7 @@ begin
    vga_sync_unit: vga_sync port map(clk => clk, reset => resetSW, hsync => hsync, vsync => vsync, pixel_x => pixel_x, pixel_y => pixel_y, video_on => video_on, p_tick => pixel_tick);
     
   process ( pixel_x, pixel_y )
-    variable scale : integer := 4;
+    variable scale : integer := 20;
     variable x_shift : integer := 80;
     begin
         red_next <= "0000";
