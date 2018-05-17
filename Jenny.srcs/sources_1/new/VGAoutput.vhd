@@ -32,54 +32,89 @@ architecture Behavioral of VGAoutput is
     signal red_reg, red_next: std_logic_vector(3 downto 0) := (others => '0');
     signal green_reg, green_next: std_logic_vector(3 downto 0) := (others => '0');
     signal blue_reg, blue_next: std_logic_vector(3 downto 0) := (others => '0'); 
+    signal clk_enable : std_logic;
+    signal clk_enable_counter : std_logic_vector(9 downto 0);
 
 begin
 
    vga_sync_unit: vga_sync port map(clk => clk, reset => resetSW, hsync => hsync, vsync => vsync, pixel_x => pixel_x, pixel_y => pixel_y, video_on => video_on, p_tick => pixel_tick);
-
+    
   process ( pixel_x, pixel_y )
+    variable scale : integer := 20;
+    variable x_shift : integer := 0;
     begin
         red_next <= "0000";
         green_next <= "0000";
         blue_next <= "0000";
-        if (unsigned(pixel_x) > 560) or (unsigned(pixel_x) < 80) then
-            red_next <= "1111";
-            green_next <= "1111";
-            blue_next <= "1111";
-        end if;
-        if (unsigned(pixel_x) = unsigned(point1x) + 80) and (unsigned(pixel_y) = unsigned(point1y)) then
-            red_next <= "1111";
-            green_next <= "0010";
-            blue_next <= "0010";
-        elsif (unsigned(pixel_x) = unsigned(point2x) + 80) and (unsigned(pixel_y) = unsigned(point2y)) then
-            red_next <= "1111";
-            green_next <= "0010";
-            blue_next <= "0010";
-        elsif (unsigned(pixel_x) = unsigned(point3x) + 80) and (unsigned(pixel_y) = unsigned(point3y)) then
-            red_next <= "1111";
-            green_next <= "0010";
-            blue_next <= "0010";
-        elsif (unsigned(pixel_x) = unsigned(point4x) + 80) and (unsigned(pixel_y) = unsigned(point4y)) then
-            red_next <= "1111";
-            green_next <= "0010";
-            blue_next <= "0010";
-        elsif (unsigned(pixel_x) = unsigned(point5x) + 80) and (unsigned(pixel_y) = unsigned(point5y)) then
-            red_next <= "1111";
-            green_next <= "0010";
-            blue_next <= "0010";
-        elsif (unsigned(pixel_x) = unsigned(point6x) + 80) and (unsigned(pixel_y) = unsigned(point6y)) then
-            red_next <= "1111";
-            green_next <= "0010";
-            blue_next <= "0010";
-        elsif (unsigned(pixel_x) = unsigned(point7x) + 80) and (unsigned(pixel_y) = unsigned(point7y)) then
-            red_next <= "1111";
-            green_next <= "0010";
-            blue_next <= "0010";
-        elsif (unsigned(pixel_x) = unsigned(point8x) + 80) and (unsigned(pixel_y) = unsigned(point8y)) then
+        --if (unsigned(pixel_x) > 560) or (unsigned(pixel_x) < 80) then
+        --    red_next <= "1111";
+        --    green_next <= "1111";
+        --    blue_next <= "1111";
+        --end if;
+        if (unsigned(pixel_x) >= (unsigned(point1x)) * scale + x_shift) 
+        and (unsigned(pixel_x) < (unsigned(point1x)) * (scale) + scale + x_shift) 
+        and (unsigned(pixel_y) >= (unsigned(point1y)) * scale) 
+        and (unsigned(pixel_y) < (unsigned(point1y)) * (scale) + scale) then
             red_next <= "1111";
             green_next <= "0010";
             blue_next <= "0010";
         end if;
+--        if (unsigned(pixel_x) >= (unsigned(point2x)) * scale + x_shift) 
+--        and (unsigned(pixel_x) < (unsigned(point2x)) * (scale) + scale + x_shift) 
+--        and (unsigned(pixel_y) >= (unsigned(point2y)) * scale) 
+--        and (unsigned(pixel_y) < (unsigned(point2y)) * (scale) + scale) then
+--            red_next <= "1111";
+--            green_next <= "0010";
+--            blue_next <= "0010";
+--        end if;
+--        if (unsigned(pixel_x) >= (unsigned(point3x)) * scale + x_shift) 
+--        and (unsigned(pixel_x) < (unsigned(point3x)) * (scale) + scale + x_shift) 
+--        and (unsigned(pixel_y) >= (unsigned(point3y)) * scale) 
+--        and (unsigned(pixel_y) < (unsigned(point3y)) * (scale) + scale) then
+--            red_next <= "1111";
+--            green_next <= "0010";
+--            blue_next <= "0010";
+--        end if;
+--        if (unsigned(pixel_x) >= (unsigned(point4x)) * scale + x_shift) 
+--        and (unsigned(pixel_x) < (unsigned(point4x)) * (scale) + scale + x_shift) 
+--        and (unsigned(pixel_y) >= (unsigned(point4y)) * scale) 
+--        and (unsigned(pixel_y) < (unsigned(point4y)) * (scale) + scale) then
+--            red_next <= "1111";
+--            green_next <= "0010";
+--            blue_next <= "0010";
+--        end if;
+--        if (unsigned(pixel_x) >= (unsigned(point5x)) * scale + x_shift) 
+--        and (unsigned(pixel_x) < (unsigned(point5x)) * (scale) + scale + x_shift) 
+--        and (unsigned(pixel_y) >= (unsigned(point5y)) * scale) 
+--        and (unsigned(pixel_y) < (unsigned(point5y)) * (scale) +  scale) then
+--            red_next <= "1111";
+--            green_next <= "0010";
+--            blue_next <= "0010";
+--        end if;
+--        if (unsigned(pixel_x) >= (unsigned(point6x)) * scale + x_shift) 
+--        and (unsigned(pixel_x) < (unsigned(point6x)) * (scale) + scale + x_shift) 
+--        and (unsigned(pixel_y) >= (unsigned(point6y)) * scale) 
+--        and (unsigned(pixel_y) < (unsigned(point6y)) * (scale) + scale) then
+--            red_next <= "1111";
+--            green_next <= "0010";
+--            blue_next <= "0010";
+--        end if;
+--        if (unsigned(pixel_x) >= (unsigned(point7x)) * scale + x_shift) 
+--        and (unsigned(pixel_x) < (unsigned(point7x)) * (scale) + scale + x_shift) 
+--        and (unsigned(pixel_y) >= (unsigned(point7y)) * scale) 
+--        and (unsigned(pixel_y) < (unsigned(point7y)) * (scale) + scale) then
+--            red_next <= "1111";
+--            green_next <= "0010";
+--            blue_next <= "0010";
+--        end if;
+--        if (unsigned(pixel_x) >= (unsigned(point8x)) * scale + x_shift) 
+--        and (unsigned(pixel_x) < (unsigned(point8x)) * (scale) + scale + x_shift) 
+--        and (unsigned(pixel_y) >= (unsigned(point8y)) * scale) 
+--        and (unsigned(pixel_y) < (unsigned(point8y)) * (scale) + scale) then
+--            red_next <= "1111";
+--            green_next <= "0010";
+--            blue_next <= "0010";
+--        end if;
   end process;
 
 --print points to screen and make lines between them
