@@ -40,17 +40,17 @@ begin
    vga_sync_unit: vga_sync port map(clk => clk, reset => resetSW, hsync => hsync, vsync => vsync, pixel_x => pixel_x, pixel_y => pixel_y, video_on => video_on, p_tick => pixel_tick);
     
   process ( pixel_x, pixel_y )
-    variable scale : integer := 20;
-    variable x_shift : integer := 0;
+    variable scale : integer := 4;
+    variable x_shift : integer := 80;
     begin
         red_next <= "0000";
         green_next <= "0000";
         blue_next <= "0000";
-        --if (unsigned(pixel_x) > 560) or (unsigned(pixel_x) < 80) then
-        --    red_next <= "1111";
-        --    green_next <= "1111";
-        --    blue_next <= "1111";
-        --end if;
+        if (unsigned(pixel_x) > 560) or (unsigned(pixel_x) < 80) then
+            red_next <= "1111";
+            green_next <= "1111";
+            blue_next <= "1111";
+        end if;
         if (unsigned(pixel_x) >= (unsigned(point1x)) * scale + x_shift) 
         and (unsigned(pixel_x) < (unsigned(point1x)) * (scale) + scale + x_shift) 
         and (unsigned(pixel_y) >= (unsigned(point1y)) * scale) 
@@ -59,62 +59,62 @@ begin
             green_next <= "0010";
             blue_next <= "0010";
         end if;
---        if (unsigned(pixel_x) >= (unsigned(point2x)) * scale + x_shift) 
---        and (unsigned(pixel_x) < (unsigned(point2x)) * (scale) + scale + x_shift) 
---        and (unsigned(pixel_y) >= (unsigned(point2y)) * scale) 
---        and (unsigned(pixel_y) < (unsigned(point2y)) * (scale) + scale) then
---            red_next <= "1111";
---            green_next <= "0010";
---            blue_next <= "0010";
---        end if;
---        if (unsigned(pixel_x) >= (unsigned(point3x)) * scale + x_shift) 
---        and (unsigned(pixel_x) < (unsigned(point3x)) * (scale) + scale + x_shift) 
---        and (unsigned(pixel_y) >= (unsigned(point3y)) * scale) 
---        and (unsigned(pixel_y) < (unsigned(point3y)) * (scale) + scale) then
---            red_next <= "1111";
---            green_next <= "0010";
---            blue_next <= "0010";
---        end if;
---        if (unsigned(pixel_x) >= (unsigned(point4x)) * scale + x_shift) 
---        and (unsigned(pixel_x) < (unsigned(point4x)) * (scale) + scale + x_shift) 
---        and (unsigned(pixel_y) >= (unsigned(point4y)) * scale) 
---        and (unsigned(pixel_y) < (unsigned(point4y)) * (scale) + scale) then
---            red_next <= "1111";
---            green_next <= "0010";
---            blue_next <= "0010";
---        end if;
---        if (unsigned(pixel_x) >= (unsigned(point5x)) * scale + x_shift) 
---        and (unsigned(pixel_x) < (unsigned(point5x)) * (scale) + scale + x_shift) 
---        and (unsigned(pixel_y) >= (unsigned(point5y)) * scale) 
---        and (unsigned(pixel_y) < (unsigned(point5y)) * (scale) +  scale) then
---            red_next <= "1111";
---            green_next <= "0010";
---            blue_next <= "0010";
---        end if;
---        if (unsigned(pixel_x) >= (unsigned(point6x)) * scale + x_shift) 
---        and (unsigned(pixel_x) < (unsigned(point6x)) * (scale) + scale + x_shift) 
---        and (unsigned(pixel_y) >= (unsigned(point6y)) * scale) 
---        and (unsigned(pixel_y) < (unsigned(point6y)) * (scale) + scale) then
---            red_next <= "1111";
---            green_next <= "0010";
---            blue_next <= "0010";
---        end if;
---        if (unsigned(pixel_x) >= (unsigned(point7x)) * scale + x_shift) 
---        and (unsigned(pixel_x) < (unsigned(point7x)) * (scale) + scale + x_shift) 
---        and (unsigned(pixel_y) >= (unsigned(point7y)) * scale) 
---        and (unsigned(pixel_y) < (unsigned(point7y)) * (scale) + scale) then
---            red_next <= "1111";
---            green_next <= "0010";
---            blue_next <= "0010";
---        end if;
---        if (unsigned(pixel_x) >= (unsigned(point8x)) * scale + x_shift) 
---        and (unsigned(pixel_x) < (unsigned(point8x)) * (scale) + scale + x_shift) 
---        and (unsigned(pixel_y) >= (unsigned(point8y)) * scale) 
---        and (unsigned(pixel_y) < (unsigned(point8y)) * (scale) + scale) then
---            red_next <= "1111";
---            green_next <= "0010";
---            blue_next <= "0010";
---        end if;
+        if (unsigned(pixel_x) >= (unsigned(point2x)) * scale + x_shift) 
+        and (unsigned(pixel_x) < (unsigned(point2x)) * (scale) + scale + x_shift) 
+        and (unsigned(pixel_y) >= (unsigned(point2y)) * scale) 
+        and (unsigned(pixel_y) < (unsigned(point2y)) * (scale) + scale) then
+            red_next <= "1111";
+            green_next <= "0010";
+            blue_next <= "0010";
+        end if;
+        if (unsigned(pixel_x) >= (unsigned(point3x)) * scale + x_shift) 
+        and (unsigned(pixel_x) < (unsigned(point3x)) * (scale) + scale + x_shift) 
+        and (unsigned(pixel_y) >= (unsigned(point3y)) * scale) 
+        and (unsigned(pixel_y) < (unsigned(point3y)) * (scale) + scale) then
+            red_next <= "1111";
+            green_next <= "0010";
+            blue_next <= "0010";
+        end if;
+        if (unsigned(pixel_x) >= (unsigned(point4x)) * scale + x_shift) 
+        and (unsigned(pixel_x) < (unsigned(point4x)) * (scale) + scale + x_shift) 
+        and (unsigned(pixel_y) >= (unsigned(point4y)) * scale) 
+        and (unsigned(pixel_y) < (unsigned(point4y)) * (scale) + scale) then
+            red_next <= "1111";
+            green_next <= "0010";
+            blue_next <= "0010";
+        end if;
+        if (unsigned(pixel_x) >= (unsigned(point5x)) * scale + x_shift) 
+        and (unsigned(pixel_x) < (unsigned(point5x)) * (scale) + scale + x_shift) 
+        and (unsigned(pixel_y) >= (unsigned(point5y)) * scale) 
+        and (unsigned(pixel_y) < (unsigned(point5y)) * (scale) +  scale) then
+            red_next <= "1111";
+            green_next <= "0010";
+            blue_next <= "0010";
+        end if;
+        if (unsigned(pixel_x) >= (unsigned(point6x)) * scale + x_shift) 
+        and (unsigned(pixel_x) < (unsigned(point6x)) * (scale) + scale + x_shift) 
+        and (unsigned(pixel_y) >= (unsigned(point6y)) * scale) 
+        and (unsigned(pixel_y) < (unsigned(point6y)) * (scale) + scale) then
+            red_next <= "1111";
+            green_next <= "0010";
+            blue_next <= "0010";
+        end if;
+        if (unsigned(pixel_x) >= (unsigned(point7x)) * scale + x_shift) 
+        and (unsigned(pixel_x) < (unsigned(point7x)) * (scale) + scale + x_shift) 
+        and (unsigned(pixel_y) >= (unsigned(point7y)) * scale) 
+        and (unsigned(pixel_y) < (unsigned(point7y)) * (scale) + scale) then
+            red_next <= "1111";
+            green_next <= "0010";
+            blue_next <= "0010";
+        end if;
+        if (unsigned(pixel_x) >= (unsigned(point8x)) * scale + x_shift) 
+        and (unsigned(pixel_x) < (unsigned(point8x)) * (scale) + scale + x_shift) 
+        and (unsigned(pixel_y) >= (unsigned(point8y)) * scale) 
+        and (unsigned(pixel_y) < (unsigned(point8y)) * (scale) + scale) then
+            red_next <= "1111";
+            green_next <= "0010";
+            blue_next <= "0010";
+        end if;
   end process;
 
 --print points to screen and make lines between them

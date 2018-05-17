@@ -13,7 +13,7 @@ entity imem is -- instruction memory
 end;
 
 architecture behave of imem is
-    type ramtype is array (63 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
+    type ramtype is array (200 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
     
     -- Function to initialize the instruction memory from a data file
     impure function InitRamFromFile ( RamFileName : in string ) return RamType is
@@ -26,7 +26,7 @@ architecture behave of imem is
     variable RAM:       ramtype;
     begin
         -- Initialize memory from a file
-        for i in 0 to 63 loop -- set all contents low
+        for i in 0 to 200 loop -- set all contents low
             RAM(i) := std_logic_vector(to_unsigned(0, 32));
         end loop;
         index := 0;
@@ -57,7 +57,7 @@ architecture behave of imem is
     end function;
     
     -- Use the impure function to read RAM from a file and store in the FPGA's ram memory
-    signal mem: ramtype := InitRamFromFile("vgasimple.dat");
+    signal mem: ramtype := InitRamFromFile("movecube4.dat");
     
     begin
     
