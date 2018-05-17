@@ -18,6 +18,7 @@ end JennyBasicTester;
 architecture Behavioral of JennyBasicTester is
     component jenny_top is
       Port (clk: in STD_LOGIC;
+      reset : in STD_LOGIC;
            resetSW: in STD_LOGIC;
            SW: in STD_LOGIC_VECTOR(11 downto 0) := "100000000000";
            red, green, blue: out STD_LOGIC_VECTOR(3 downto 0);
@@ -26,13 +27,13 @@ architecture Behavioral of JennyBasicTester is
     end component;
     signal reset, clk :STD_LOGIC;
     signal hsync, vsync: STD_LOGIC;
-    signal sw: STD_LOGIC_VECTOR(11 downto 0);
+    signal sw: STD_LOGIC_VECTOR(11 downto 0):="000000000001";
     signal red, green, blue: STD_LOGIC_VECTOR(3 downto 0);
-    signal resetSW: STD_LOGIC;
+    signal resetSW: STD_LOGIC := '0';
 begin
     jenny: jenny_top port map(clk => clk, resetsw => resetsw,
     sw => sw,
-    red => red, green => green, blue => blue, hsync => hsync, vsync => vsync);
+    red => red, green => green, blue => blue, hsync => hsync, vsync => vsync, reset => reset);
     
     process begin
         clk <= '1';

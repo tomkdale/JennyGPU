@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="35" Path="C:/Users/tdale19/Desktop/JennyGPU/Jenny.xpr">
+<Project Version="7" Minor="35" Path="C:/Users/dmariotti19/Documents/GitHub/JennyGPU/Jenny.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="9b7216e36a074bf183c3f1fac3b63f80"/>
@@ -35,7 +35,7 @@
     <Option Name="DSAVendor" Val="xilinx"/>
     <Option Name="DSABoardId" Val="nexys4_ddr"/>
     <Option Name="DSANumComputeUnits" Val="60"/>
-    <Option Name="WTXSimLaunchSim" Val="247"/>
+    <Option Name="WTXSimLaunchSim" Val="251"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>

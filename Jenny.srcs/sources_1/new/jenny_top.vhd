@@ -6,6 +6,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity jenny_top is
   Port (clk: in STD_LOGIC;
+       reset : in STD_LOGIC;
        resetSW: in STD_LOGIC;
        SW: in STD_LOGIC_VECTOR(11 downto 0);
        red, green, blue: out STD_LOGIC_VECTOR(3 downto 0);
@@ -69,7 +70,6 @@ architecture Behavioral of jenny_top is
     signal alucontrol: STD_LOGIC_VECTOR(3 downto 0);
     signal p1x, p2x, p3x, p4x, p5x, p6x, p7x, p8x: STD_LOGIC_VECTOR(31 downto 0);
     signal p1y, p2y, p3y, p4y, p5y, p6y, p7y, p8y: STD_LOGIC_VECTOR(31 downto 0);
-    signal reset: STD_LOGIC := '0';
     signal clkn: STD_LOGIC;
 begin
 
@@ -78,9 +78,9 @@ begin
     begin
         if rising_edge(clk) then
             counter := counter + 1;
-            if counter = 10000000 then
+            if counter = 100000 then
                 clkn <= '1';
-            elsif counter = 20000000 then
+            elsif counter = 200000 then
                 clkn <= '0';
                 counter := 0;
             end if;
